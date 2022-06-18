@@ -1,0 +1,23 @@
+Projektaufteilung:
+
+Das Projekt haben wir in folgende Teilaufgaben aufgeteilt und die angebene Person hat sich größtenteils darum gekümmmert:
+
+
+- Randomwalk und Client sowie UML-Diagramm : 				Fengyi
+- Server / Methoden für angemeldete Nutzer Unittests und ReadME: 	Tobias
+- JSON Einbindung / Erstellung von Nutzer und Projektaufteilung: 	Maximilian
+
+
+Natürlich haben wir uns regelmäßig im Discord getroffen, oft die Funktion "Code With Me" von IntelliJ IDEA benutzt und bei Schwierigkeiten gemeinsam überlegt, sodass die Aufteilung nur grob zutrifft.
+
+
+
+Projektstatus:
+
+- UML-Diagramm und Ideen zur Projektumsetzung : erledigt
+- Erstellung der Randomwalk Klasse : erledigt
+- Aufbau des Servers und Methoden für angemeldete Nutzer : erledigt
+- Klasse zur Erstellung neuer Nutzer inklusive Erstellung einer Nutzer.json : erledigt
+- Aufbau des Clients : erledigt
+- Ausführliches Testen des Projekts mithilfe von Unittests : erledigt
+- Schreiben der ReadME und Projektstatus und Projektaufteilung : erledigt

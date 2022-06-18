@@ -1,0 +1,14 @@
+Unittests:
+
+Wir haben den wesentlichen Funktionsumfang des Servers zum einen ohne REST-Schnittstelle und zum anderen mit REST-Schnittstelle mit JUnit getestet:
+
+
+Für die Testung ohne REST-Schnittstelle haben wir die Klasse ClientMitMain erstellt, die eine Instanz des Server kreiert und alle Methode mit dieser Instanz aufruft.
+Der Server muss also nicht explizit gestartet werden, damit ClientMitMain ausgeführt werden kann.
+
+Für die Testung mit REST-Schnittstelle haben wir die Klasse ServerTest erstellt, die genau wie der Client des Projektes eine Instanz der Klasse RestTemplate erstellt 
+und damit die URIs des Server auruft und die Rückgabe in einem String speichert.
+Damit ServerTest ausgeführt werden kann, muss der Server zuerst gestartet werden.
+Bei den Tests innerhalb der Klasse ServerTest haben wir versucht jedes mögliche Szenario zu implementieren.
+So kann beispielsweise die Methode login einmal mit falschem Benutzernamen, einmal mit falschem Passwort, einmal ohne vorangehende Registrierung und einmal erfolgreich
+ausgefühtt werden.
