@@ -1,4 +1,4 @@
-package com.example.restservice;
+package unused;
 import org.json.simple.parser.ParseException;
 import org.springframework.web.client.RestTemplate;
 import java.io.IOException;

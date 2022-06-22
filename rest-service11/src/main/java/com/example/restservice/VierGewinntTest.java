@@ -10,7 +10,7 @@ public class VierGewinntTest {
                         for (int j =0;j<f[i].length;j++) {
                                 if (j% 2 == 0) f[i][j] ="|";
                                 else f[i][j] = " ";
-                                if (i==6) f[i][j]= "-";
+                                if (i==6) f[i][j]= "";
                         }
 
                 }
@@ -30,11 +30,11 @@ public static void printPattern(String[][] f) {
 
 
 public static void dropRedPattern(String[][] f){
-        System.out.println("Drop a red disk at column (0–6): ");
+        System.out.println("Wirf eine rote Schreibe in die Spalte (0–6): ");
         Scanner scan = new Scanner (System.in);
         int c = 2*scan.nextInt()+1;
 
-        for (int i =5;i>=0;i--) {
+        for (int i=5; i>=0; i--) {
                 if (f[i][c] == " ") {
                         f[i][c] = "R";
                         break;
@@ -44,7 +44,7 @@ public static void dropRedPattern(String[][] f){
 
 
 public static void dropYellowPattern(String[][] f) {
-        System.out.println("Drop a yellow disk at column (0–6): ");
+        System.out.println("Wirf eine gelbe Schreibe in die Spalte (0–6): ");
         Scanner scan = new Scanner(System.in);
         int c = 2 * scan.nextInt() + 1;
 
@@ -58,9 +58,10 @@ public static void dropYellowPattern(String[][] f) {
 
 
 public static String checkWinner(String[][] f){
-        for (int i =0;i<6;i++) {
 
-                for (int j = 0; j < 7; j += 2) {
+        for (int i =0; i<6; i++) {
+
+                for (int j=0; j<7; j+=2) {
                         if ((f[i][j + 1] != " ")
                                 && (f[i][j + 3] != " ")
                                 && (f[i][j + 5] != " ")
@@ -130,8 +131,8 @@ while(loop) {
         printPattern(f);
 
         if (checkWinner(f) != null) {
-                if (checkWinner(f) == "R") System.out.println("The red player won.");
-                else if (checkWinner(f) == "Y") System.out.println("The yellow player won.");
+                if (checkWinner(f) == "R") System.out.println("Spieler rot gewinnt.");
+                else if (checkWinner(f) == "Y") System.out.println("Spieler gelb gewinnt.");
                 loop = false;
         }
      }

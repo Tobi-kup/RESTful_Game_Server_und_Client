@@ -1,4 +1,4 @@
-package com.example.restservice;
+package unused;
 import static java.lang.Math.*;
 
 public class Randomwalk {

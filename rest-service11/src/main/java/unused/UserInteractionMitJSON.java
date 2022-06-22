@@ -1,11 +1,12 @@
-package com.example.restservice;
+package unused;
+import com.example.restservice.UserCreation;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.web.bind.annotation.*;
 import org.json.simple.*;
+import unused.Randomwalk;
+
 import java.io.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 
 /** UserInteractionMitJSON ist die Klasse zur Erstellung der URIs, sie ist der Server des Projektes.

@@ -27,17 +27,7 @@ public class UserCreation {
 
              newUser.put("name", name);
              newUser.put("password", password);
-             newUser.put("balance", 1000.0);
-             newUser.put("RedditKarma", 0.0);
-             newUser.put("VpPoints", 0.0);
-             newUser.put("Toilettenpapier", 0.0);
-             newUser.put("Rapsoel", 0.0);
-             newUser.put("NFTs", 0.0);
-             newUser.put("LSD", 0.0);
-             newUser.put("Grafikkarten", 0.0);
-             newUser.put("Nieren", 0.0);
-             newUser.put("DiscordNitro", 0.0);
-             newUser.put("CsgoCaseKeys", 0.0);
+             newUser.put("hasGame", false);
 
              FileWriter file = new FileWriter(  name + ".json");
              file.write(newUser.toJSONString());
