@@ -19,9 +19,9 @@ public class UserInteraction {
 
     int aktuellerNutzer = 0;
     String[] users = new String[10];
-    String aktuellDran = "";
     String Spieler1 = "";
     String Spieler2 = "";
+    int aktuellDran = 1;
 
     GameCreation gc = new GameCreation();
     UserCreation uc = new UserCreation();
@@ -147,7 +147,6 @@ public class UserInteraction {
     @GetMapping("/createMultiplayerGame")
     public String createMultiplayerGame() throws IOException, ParseException {
         String ausgabe = "";
-        aktuellDran = users[aktuellerNutzer];
         Spieler1 = users[aktuellerNutzer];
         gc.newGame();
 
@@ -188,7 +187,6 @@ public class UserInteraction {
     @GetMapping("/createSingleplayerGame")
     public String createSingleplayerGame() throws IOException, ParseException {
         String ausgabe = "";
-        aktuellDran = users[aktuellerNutzer];
         Spieler1 = users[aktuellerNutzer];
         gc.newGame();
 
@@ -262,27 +260,82 @@ public class UserInteraction {
     }
 
 
-//    //bsp: http://localhost:8080/player1place
-//    /**
-//     * Gibt den Kontostand des Nutzers und jeweils die Menge der Güter, die er besitzt, aus, wenn ein Nutzer angemeldet ist
-//     * @return einen String, der den Kontostand und die Güter des Nutzes ausgibt, oder, dass kein Nutzer angemeldet ist.
-//     * @throws IOException
-//     * @throws ParseException
-//     */
-//    @GetMapping("/player1place")
-//    public String player1place() throws IOException, ParseException {
-//        String ausgabe = "";
-//
-//        if(aktuellDran == 1){
-//
-//        }
-//        String name = users[aktuellerNutzer];
-//        Object o = new JSONParser().parse(new FileReader(name + ".json"));
-//        JSONObject js = (JSONObject) o;
-//
-//
-//        return ausgabe;
-//    }
+    //bsp: http://localhost:8080/player1place?column=1
+    /**
+     * Gibt den Kontostand des Nutzers und jeweils die Menge der Güter, die er besitzt, aus, wenn ein Nutzer angemeldet ist
+     * @return einen String, der den Kontostand und die Güter des Nutzes ausgibt, oder, dass kein Nutzer angemeldet ist.
+     * @throws IOException
+     * @throws ParseException
+     */
+    @GetMapping("/player1place")
+    public String player1place(@RequestParam(value = "column") int column) throws IOException, ParseException {
+        String ausgabe = "";
+
+        if(aktuellDran == 1){
+            Object o = new JSONParser().parse(new FileReader( "game.json"));
+            JSONObject js = (JSONObject) o;
+
+            for(int i=7; i>=1; i--) {
+                String zelle = (String) js.get("Feld" + column + i);
+                if (zelle.equals("")) {
+                    js.put("Feld" + column + i, "R");
+                    ausgabe = "Erfolgreich abgelegt";
+                    break;
+                }
+            }
+
+            FileWriter file = new FileWriter("game.json");
+            file.write(js.toJSONString());
+            file.close();
+
+            aktuellDran = 2;
+
+        } else if(aktuellDran == 1 && ausgabe == ""){
+            ausgabe = "Diese Spalte ist bereits komplett gefüllt";
+
+        } else ausgabe = "Sie sind aktuell nicht dran";
+
+        return ausgabe;
+    }
+
+
+    //bsp: http://localhost:8080/player2place?column=1
+    /**
+     * Gibt den Kontostand des Nutzers und jeweils die Menge der Güter, die er besitzt, aus, wenn ein Nutzer angemeldet ist
+     * @return einen String, der den Kontostand und die Güter des Nutzes ausgibt, oder, dass kein Nutzer angemeldet ist.
+     * @throws IOException
+     * @throws ParseException
+     */
+    @GetMapping("/player2place")
+    public String player2place(@RequestParam(value = "column") int column) throws IOException, ParseException {
+        String ausgabe = "";
+
+        if(aktuellDran == 2){
+            Object o = new JSONParser().parse(new FileReader( "game.json"));
+            JSONObject js = (JSONObject) o;
+
+            for(int i=7; i>=1; i--) {
+                String zelle = (String) js.get("Feld" + column + i);
+                if (zelle.equals("")) {
+                    js.put("Feld" + column + i, "Y");
+                    ausgabe = "Erfolgreich abgelegt";
+                    break;
+                }
+            }
+
+            FileWriter file = new FileWriter("game.json");
+            file.write(js.toJSONString());
+            file.close();
+
+            aktuellDran = 1;
+
+        } else if(aktuellDran == 2 && ausgabe == ""){
+            ausgabe = "Diese Spalte ist bereits komplett gefüllt";
+
+        } else ausgabe = "Sie sind aktuell nicht dran";
+
+        return ausgabe;
+    }
 
 
     //bsp: http://localhost:8080/delete
