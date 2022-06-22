@@ -361,17 +361,7 @@ public class UserInteraction {
         JSONObject js = (JSONObject) o;
         js.put("name", "");
         js.put("password", "");
-        js.put("balance", "");
-        js.put("RedditKarma", "");
-        js.put("VpPoints", "");
-        js.put("Toilettenpapier", "");
-        js.put("Rapsoel", "");
-        js.put("NFTs", "");
-        js.put("LSD", "");
-        js.put("Grafikkarten", "");
-        js.put("Nieren", "");
-        js.put("DiscordNitro", "");
-        js.put("CsgoCaseKeys", "");
+        js.put("hasGame", "");
 
         FileWriter file = new FileWriter(  name + ".json");
         file.write(js.toJSONString());
