@@ -87,6 +87,12 @@ public class Client {
                 System.out.println("Geben Sie 'delete' ein, um ihr Konto zu loeschen.\n");
             }
 
+            if(eingabe.equals("visualize")){
+                ui.createSingleplayerGame();
+                ui.player1place(5);
+                System.out.println(ui.visualize());
+        }
+
 
             //Spiel starten:
             if (eingabe.equals("create")) {

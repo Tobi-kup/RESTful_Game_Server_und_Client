@@ -275,10 +275,10 @@ public class UserInteraction {
             Object o = new JSONParser().parse(new FileReader( "game.json"));
             JSONObject js = (JSONObject) o;
 
-            for(int i=7; i>=1; i--) {
-                String zelle = (String) js.get("Feld" + column + i);
-                if (zelle.equals("")) {
-                    js.put("Feld" + column + i, "R");
+            for(int i=6; i>=1; i--) {
+                String zelle = (String) js.get("Feld" + i + column);
+                if (zelle.equals(" ")) {
+                    js.put("Feld" + i + column, "R");
                     ausgabe = "Erfolgreich abgelegt";
                     break;
                 }
@@ -314,10 +314,10 @@ public class UserInteraction {
             Object o = new JSONParser().parse(new FileReader( "game.json"));
             JSONObject js = (JSONObject) o;
 
-            for(int i=7; i>=1; i--) {
-                String zelle = (String) js.get("Feld" + column + i);
-                if (zelle.equals("")) {
-                    js.put("Feld" + column + i, "Y");
+            for(int i=6; i>=1; i--) {
+                String zelle = (String) js.get("Feld" + i + column);
+                if (zelle.equals(" ")) {
+                    js.put("Feld" + i + column, "Y");
                     ausgabe = "Erfolgreich abgelegt";
                     break;
                 }
@@ -333,6 +333,81 @@ public class UserInteraction {
             ausgabe = "Diese Spalte ist bereits komplett gefüllt";
 
         } else ausgabe = "Sie sind aktuell nicht dran";
+
+        return ausgabe;
+    }
+
+
+    //bsp: http://localhost:8080/visualize
+    /**
+     * Gibt den Kontostand des Nutzers und jeweils die Menge der Güter, die er besitzt, aus, wenn ein Nutzer angemeldet ist
+     * @return einen String, der den Kontostand und die Güter des Nutzes ausgibt, oder, dass kein Nutzer angemeldet ist.
+     * @throws IOException
+     * @throws ParseException
+     */
+    @GetMapping("/visualize")
+    public String visualize() throws IOException, ParseException {
+        String ausgabe = "";
+
+        Object o = new JSONParser().parse(new FileReader( "game.json"));
+        JSONObject js = (JSONObject) o;
+
+        String Feld11 = (String) js.get("Feld11");
+        String Feld12 = (String) js.get("Feld12");
+        String Feld13 = (String) js.get("Feld13");
+        String Feld14 = (String) js.get("Feld14");
+        String Feld15 = (String) js.get("Feld15");
+        String Feld16 = (String) js.get("Feld16");
+        String Feld17 = (String) js.get("Feld17");
+
+        String Feld21 = (String) js.get("Feld21");
+        String Feld22 = (String) js.get("Feld22");
+        String Feld23 = (String) js.get("Feld23");
+        String Feld24 = (String) js.get("Feld24");
+        String Feld25 = (String) js.get("Feld25");
+        String Feld26 = (String) js.get("Feld26");
+        String Feld27 = (String) js.get("Feld27");
+
+        String Feld31 = (String) js.get("Feld31");
+        String Feld32 = (String) js.get("Feld32");
+        String Feld33 = (String) js.get("Feld33");
+        String Feld34 = (String) js.get("Feld34");
+        String Feld35 = (String) js.get("Feld35");
+        String Feld36 = (String) js.get("Feld36");
+        String Feld37 = (String) js.get("Feld37");
+
+        String Feld41 = (String) js.get("Feld41");
+        String Feld42 = (String) js.get("Feld42");
+        String Feld43 = (String) js.get("Feld43");
+        String Feld44 = (String) js.get("Feld44");
+        String Feld45 = (String) js.get("Feld45");
+        String Feld46 = (String) js.get("Feld46");
+        String Feld47 = (String) js.get("Feld47");
+
+        String Feld51 = (String) js.get("Feld51");
+        String Feld52 = (String) js.get("Feld52");
+        String Feld53 = (String) js.get("Feld53");
+        String Feld54 = (String) js.get("Feld54");
+        String Feld55 = (String) js.get("Feld55");
+        String Feld56 = (String) js.get("Feld56");
+        String Feld57 = (String) js.get("Feld57");
+
+        String Feld61 = (String) js.get("Feld61");
+        String Feld62 = (String) js.get("Feld62");
+        String Feld63 = (String) js.get("Feld63");
+        String Feld64 = (String) js.get("Feld64");
+        String Feld65 = (String) js.get("Feld65");
+        String Feld66 = (String) js.get("Feld66");
+        String Feld67 = (String) js.get("Feld67");
+
+
+        ausgabe = "|" + Feld11 + "|" + Feld12 + "|" + Feld13 + "|" + Feld14 + "|" + Feld15 + "|" + Feld16 + "|" + Feld17 + "|\n"  +
+                  "|" + Feld21 + "|" + Feld22 + "|" + Feld23 + "|" + Feld24 + "|" + Feld25 + "|" + Feld26 + "|" + Feld27 + "|\n"  +
+                  "|" + Feld31 + "|" + Feld32 + "|" + Feld33 + "|" + Feld34 + "|" + Feld35 + "|" + Feld36 + "|" + Feld37 + "|\n"  +
+                  "|" + Feld41 + "|" + Feld42 + "|" + Feld43 + "|" + Feld44 + "|" + Feld45 + "|" + Feld46 + "|" + Feld47 + "|\n"  +
+                  "|" + Feld51 + "|" + Feld52 + "|" + Feld53 + "|" + Feld54 + "|" + Feld55 + "|" + Feld56 + "|" + Feld57 + "|\n"  +
+                  "|" + Feld61 + "|" + Feld62 + "|" + Feld63 + "|" + Feld64 + "|" + Feld65 + "|" + Feld66 + "|" + Feld67 + "|\n";
+
 
         return ausgabe;
     }
