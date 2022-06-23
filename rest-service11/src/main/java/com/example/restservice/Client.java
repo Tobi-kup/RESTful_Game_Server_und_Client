@@ -1,7 +1,5 @@
 package com.example.restservice;
 import org.json.simple.parser.ParseException;
-import static java.lang.Math.*;
-
 import java.io.IOException;
 import java.util.*;
 
@@ -105,7 +103,22 @@ public class Client {
                 //Gegen anderen Spieler
                 if(eingabe.equals("m")) {
                     System.out.println(ui.createMultiplayerGame());
+                    while(!ui.checkIfStartable().equals("Das Spiel kann gestartet werden")){ int setzeDieseVariableEinfachSoAuf5 = 5;}
 
+                    while(ui.checkWinner().equals("")) {
+
+                        //Nachdem Spieler 2 seinen Zug gemacht hat, macht Spieler 1 seinen
+                        if (ui.checkLastMove().equals("Spieler 1 ist am Zug")) {
+                            System.out.println("\nWirf die Scheibe in die Spalte: (1-7)");
+                            int spalte = s.nextInt();
+
+                            while (ui.checkLastMove().equals("Spieler 1 ist am Zug")) System.out.println(ui.player1place(spalte));
+                                System.out.println(ui.visualize());
+                        }
+
+                        if (ui.checkWinner().equals("R")) System.out.println("Du hast gewonnen!");
+                        else System.out.println("Du hast leider verloren");
+                    }
 
 
                 //Gegen den Computer
@@ -123,6 +136,7 @@ public class Client {
 
                         //Der Computer macht so lange zufällige Züge, bis einer gültig ist, denn er kann versuchen auf eine bereits gefüllte Zeile werfen zu wollen
                         } else while(ui.checkLastMove().equals("Spieler 2 ist am Zug")) {
+                            System.out.println("Der Computer hat folgenden Zug gemacht:");
                             ui.player2place(r.nextInt(6) + 1);
                             System.out.println(ui.visualize());
                         }
@@ -139,6 +153,23 @@ public class Client {
             else if (eingabe.equals("join")) {
                 System.out.println("Geben Sie den Namen des Spielers ein, mit dem Sie spielen wollen, sofern er ein Spiel gestartet hat.");
                 String enemy = s.nextLine();
+                eingabe = ui.join(enemy);
+                if(eingabe.equals("Sie sind dem Spiel erfolreich beigetreten.")){
+
+                    //Nachdem Spieler 1 seinen Zug gemacht hat, macht Spieler 2 seinen
+                    if (ui.checkLastMove().equals("Spieler 2 ist am Zug")) {
+                        System.out.println("\nWirf die Scheibe in die Spalte: (1-7)");
+                        int spalte = s.nextInt();
+
+                        while (ui.checkLastMove().equals("Spieler 1 ist am Zug")) System.out.println(ui.player2place(spalte));
+                        System.out.println(ui.visualize());
+                    }
+
+                    if (ui.checkWinner().equals("Y")) System.out.println("Du hast gewonnen!");
+                    else System.out.println("Du hast leider verloren");
+
+
+                } else System.out.println(eingabe);
 
             }
 

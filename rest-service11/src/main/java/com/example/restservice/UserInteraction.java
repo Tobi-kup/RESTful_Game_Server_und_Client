@@ -19,6 +19,7 @@ public class UserInteraction {
     String Spieler1 = "";
     String Spieler2 = "";
     String letzterZug = "Spieler2";
+    boolean lobbyFull = false;
 
     GameCreation gc = new GameCreation();
     UserCreation uc = new UserCreation();
@@ -227,6 +228,18 @@ public class UserInteraction {
     @GetMapping("/join")
     public String join(@RequestParam(value = "name") String name) throws IOException, ParseException {
         String ausgabe = "";
+        boolean existiert = false;
+
+        int anzahlExistenterNutzer = 0;
+        for(int i=0; i<users.length; i++) {
+            if(users[i] != null) anzahlExistenterNutzer++;
+        }
+
+        for(int i=0; i<anzahlExistenterNutzer; i++){
+            if(users[i].equals(name)) existiert = true;
+            }
+
+        if(existiert == false) return "Es ist kein Spieler mit diesem Namen registiert.";
 
 
         //Nachschauen, ob der angefragte Nutzer ein Spiel erstellt hat
@@ -244,7 +257,8 @@ public class UserInteraction {
         //Wenn das Spiel existiert und kein 2. Spieler da ist, wird der aktuelle Nutzer zum 2. Spieler
         if(hasGame == true && player2.equals("")){
             Spieler2 = users[aktuellerNutzer];
-            ausgabe = "Sie sind dem Spiel erfolreich beigetreten";
+            lobbyFull = true;
+            ausgabe = "Sie sind dem Spiel erfolreich beigetreten.";
             jsg.put("Spieler2", Spieler2);
 
             FileWriter fileg = new FileWriter("game.json");
@@ -549,6 +563,23 @@ public class UserInteraction {
                   "|" + Feld51 + "|" + Feld52 + "|" + Feld53 + "|" + Feld54 + "|" + Feld55 + "|" + Feld56 + "|" + Feld57 + "|\n"  +
                   "|" + Feld61 + "|" + Feld62 + "|" + Feld63 + "|" + Feld64 + "|" + Feld65 + "|" + Feld66 + "|" + Feld67 + "|\n";
 
+
+        return ausgabe;
+    }
+
+
+    //bsp: http://localhost:8080/checkIfStartable
+    /**
+     * Prüft, ob ein 2. Spieler dem selbst kreierten Spiel beigetreten ist
+     * @return einen String, der angibt, ob ein 2. Spieler beigetreten ist
+     */
+    @GetMapping("/checkIfStartable")
+    public String checkIfStartable() {
+        String ausgabe = "";
+
+        if(lobbyFull == true) ausgabe = "Das Spiel kann gestartet werden";
+
+        else ausgabe = "Es ist noch kein 2. Spieler beigetreten";
 
         return ausgabe;
     }
