@@ -1,6 +1,6 @@
 package com.example.restservice;
 import org.json.simple.parser.ParseException;
-import org.springframework.web.client.RestTemplate;
+import static java.lang.Math.*;
 
 import java.io.IOException;
 import java.util.*;
@@ -16,6 +16,7 @@ public class Client {
         boolean angemeldet = false;
         boolean registered = false;
         String ausgabe = "";
+        Random r = new Random();
 
 
         String eingabe = "";
@@ -87,7 +88,7 @@ public class Client {
                 System.out.println("Geben Sie 'delete' ein, um ihr Konto zu loeschen.\n");
             }
 
-            if(eingabe.equals("visualize")){
+            else if(eingabe.equals("visualize")){
                 ui.createSingleplayerGame();
                 ui.player1place(5);
                 System.out.println(ui.visualize());
@@ -95,23 +96,47 @@ public class Client {
 
 
             //Spiel starten:
-            if (eingabe.equals("create")) {
+            else if (eingabe.equals("create")) {
                 System.out.println("Möchten Sie gegen einen anderen Spieler oder gegen den Computer spielen?");
-                System.out.println("Geben Sie 'pvp' um gegen einen anderen Spieler zu spielen.");
-                System.out.println("Geben Sie 'pve' um gegen den Computer zu spielen.");
+                System.out.println("Geben Sie 'm' um gegen einen anderen Spieler zu spielen.");
+                System.out.println("Geben Sie 's' um gegen den Computer zu spielen.");
                 eingabe = s.nextLine();
 
-                if(eingabe.equals("pvp")) {
-                    System.out.println("Sie haben ein Spiel erfolgreich gestartet, es wird auf einen 2. Spieler gewartet...");
+                //Gegen anderen Spieler
+                if(eingabe.equals("m")) {
+                    System.out.println(ui.createMultiplayerGame());
 
-                } else if(eingabe.equals("pve")){
 
-                }
+
+                //Gegen den Computer
+                } else if(eingabe.equals("s")){
+                    System.out.println(ui.createSingleplayerGame());
+
+                    while(ui.checkWinner().equals("")) {
+
+                        //Der User macht  seinen Zug
+                        if(ui.checkLastMove().equals("Spieler 1 ist am Zug")) {
+                            System.out.println("\nWirf die Scheibe in die Spalte: (1-7)");
+                            int spalte = s.nextInt();
+                            while(ui.checkLastMove().equals("Spieler 1 ist am Zug")) System.out.println(ui.player1place(spalte));
+                            System.out.println(ui.visualize());
+
+                        //Der Computer macht so lange zufällige Züge, bis einer gültig ist, denn er kann versuchen auf eine bereits gefüllte Zeile werfen zu wollen
+                        } else while(ui.checkLastMove().equals("Spieler 2 ist am Zug")) {
+                            ui.player2place(r.nextInt(6) + 1);
+                            System.out.println(ui.visualize());
+                        }
+                    }
+
+                    if(ui.checkWinner().equals("R")) System.out.println("Du hast gewonnen!");
+                    else System.out.println("Du hast leider verloren");
+
+                } else System.out.println("Keine gueltige Eingabe");
             }
 
 
             //Spiel beitreten:
-            if (eingabe.equals("join")) {
+            else if (eingabe.equals("join")) {
                 System.out.println("Geben Sie den Namen des Spielers ein, mit dem Sie spielen wollen, sofern er ein Spiel gestartet hat.");
                 String enemy = s.nextLine();
 
@@ -119,15 +144,20 @@ public class Client {
 
 
             //Löschen
-            if (eingabe.equals("delete")) {
+            else if (eingabe.equals("delete")) {
                 System.out.println(ui.delete()+ "\n");
                 angemeldet = false;
             }
 
 
             //Ausloggen
-            if (eingabe.equals("logout")) {
+            else if (eingabe.equals("logout")) {
                 angemeldet = false;
+            }
+
+
+            else{
+                System.out.println("Keine gueltige Eingabe");
             }
         }
 

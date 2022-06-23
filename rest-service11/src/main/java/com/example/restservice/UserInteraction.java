@@ -4,14 +4,11 @@ import org.json.simple.parser.ParseException;
 import org.springframework.web.bind.annotation.*;
 import org.json.simple.*;
 import java.io.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import static java.lang.Math.*;
 
 
 /** UserInteraction ist die Klasse zur Erstellung der URIs, sie ist der Server des Projektes.
- * Sie erstellt die Pfade innerhalb des Marktplatzes.
- * Der Client soll diesen dann folgen, um sich auf dem Server zurechzufinden.
+ * Sie erstellt die Pfade innerhalb des Spiels.
+ * Der Client soll diesen dann folgen, um sich in dem Spiel zurecht zu finden und sein Konto zu verwalten.
  */
 
 @RestController
@@ -21,7 +18,6 @@ public class UserInteraction {
     String[] users = new String[10];
     String Spieler1 = "";
     String Spieler2 = "";
-    int aktuellDran = 1;
     String letzterZug = "Spieler2";
 
     GameCreation gc = new GameCreation();
@@ -54,7 +50,7 @@ public class UserInteraction {
      * und eine neue JSON Datei mit den Daten des Nutzers kreiert.
      * @param name - Name des Nutzerprofils vom Typ String
      * @param password - Passwort des Nutzerprofils vom Typ String
-     * @return einen String, der ausgibt, welcher Fehler aufgetreten ist, oder ob es funktioniert hat
+     * @return einen String, der angibt, welcher Fehler aufgetreten ist, oder ob es funktioniert hat
      * @throws IOException
      */
     @GetMapping("/signup")
@@ -97,7 +93,7 @@ public class UserInteraction {
      * Fragt den Nutzer nach seinen Nutzerdaten, um ihm den Zugang zu gewähren.
      * @param name - Name des Nutzerprofils vom Typ String
      * @param password - Passwort des Nutzerprofils vom Typ String
-     * @return einen String, der ausgibt, welcher Fehler aufgetreten ist, oder ob es funktioniert hat
+     * @return einen String, der angibt, welcher Fehler aufgetreten ist, oder ob es funktioniert hat
      */
     @GetMapping("/login")
     public String login(@RequestParam(value = "name") String name, @RequestParam(value = "password") String password) throws IOException, ParseException {
@@ -138,10 +134,52 @@ public class UserInteraction {
     }
 
 
+    //bsp: http://localhost:8080/createSingleplayerGame
+    /**
+     * Erstellt ein Spiel zwischen dem Nutzer und dem Computer
+     * @return einen String, der angibt, dass das Spiel gestartet wurde
+     * @throws IOException
+     * @throws ParseException
+     */
+    @GetMapping("/createSingleplayerGame")
+    public String createSingleplayerGame() throws IOException, ParseException {
+        String ausgabe = "";
+        Spieler1 = users[aktuellerNutzer];
+        gc.newGame();
+
+
+        //Das boolean-Attribut "hasGame" in der JSON-Datei des aufrufenden Nutzers wird auf true gesetzt
+        Object o = new JSONParser().parse(new FileReader(Spieler1 + ".json"));
+        JSONObject js = (JSONObject) o;
+        js.put("hasGame", true);
+
+        FileWriter file = new FileWriter(  Spieler1 + ".json");
+        file.write(js.toJSONString());
+        file.close();
+
+
+        //Das Attribut "Spieler1" in der JSON-Datei für den Zustand des Spiels wird auf den aufrufenden Nutzer gesetzt
+        //Und Das Attribut "Spieler2" auf "Computer"
+        Object og = new JSONParser().parse(new FileReader( "game.json"));
+        JSONObject jsg = (JSONObject) og;
+        jsg.put("Spieler1", Spieler1);
+        jsg.put("Spieler2", "Computer");
+
+
+        FileWriter fileg = new FileWriter(  "game.json");
+        fileg.write(jsg.toJSONString());
+        fileg.close();
+
+
+        ausgabe = "Spiel erfolgreich gestartet. \nSie sind am Zug.";
+        return ausgabe;
+    }
+
+
     //bsp: http://localhost:8080/createMultiplayerGame
     /**
-     * Gibt den Kontostand des Nutzers und jeweils die Menge der Güter, die er besitzt, aus, wenn ein Nutzer angemeldet ist
-     * @return einen String, der den Kontostand und die Güter des Nutzes ausgibt, oder, dass kein Nutzer angemeldet ist.
+     * Erstellt ein Spiel mit dem Nutzer als Spieler 1 und setzt das Attribut "hasGame" innerhalb des Nutzkontos auf true.
+     * @return einen String, der angibt, dass ein Spiel erstellt wurde und nun auf einen 2. Spieler gewartet wird
      * @throws IOException
      * @throws ParseException
      */
@@ -178,52 +216,11 @@ public class UserInteraction {
     }
 
 
-    //bsp: http://localhost:8080/createSingleplayerGame
-    /**
-     * Gibt den Kontostand des Nutzers und jeweils die Menge der Güter, die er besitzt, aus, wenn ein Nutzer angemeldet ist
-     * @return einen String, der den Kontostand und die Güter des Nutzes ausgibt, oder, dass kein Nutzer angemeldet ist.
-     * @throws IOException
-     * @throws ParseException
-     */
-    @GetMapping("/createSingleplayerGame")
-    public String createSingleplayerGame() throws IOException, ParseException {
-        String ausgabe = "";
-        Spieler1 = users[aktuellerNutzer];
-        gc.newGame();
-
-
-        //Das boolean-Attribut "hasGame" in der JSON-Datei des aufrufenden Nutzers wird auf true gesetzt
-        Object o = new JSONParser().parse(new FileReader(Spieler1 + ".json"));
-        JSONObject js = (JSONObject) o;
-        js.put("hasGame", true);
-
-        FileWriter file = new FileWriter(  Spieler1 + ".json");
-        file.write(js.toJSONString());
-        file.close();
-
-
-        //Das Attribut "Spieler1" in der JSON-Datei für den Zustand des Spiels wird auf den aufrufenden Nutzer gesetzt
-        //Und Das Attribut "Spieler2" auf "Computer"
-        Object og = new JSONParser().parse(new FileReader( "game.json"));
-        JSONObject jsg = (JSONObject) og;
-        jsg.put("Spieler1", Spieler1);
-        jsg.put("Spieler2", "Computer");
-
-
-        FileWriter fileg = new FileWriter(  "game.json");
-        fileg.write(jsg.toJSONString());
-        fileg.close();
-
-
-        ausgabe = "Spiel erfolgreich gestartet.";
-        return ausgabe;
-    }
-
-
     //bsp: http://localhost:8080/join?name=Max
     /**
-     * Gibt den Kontostand des Nutzers und jeweils die Menge der Güter, die er besitzt, aus, wenn ein Nutzer angemeldet ist
-     * @return einen String, der den Kontostand und die Güter des Nutzes ausgibt, oder, dass kein Nutzer angemeldet ist.
+     * Es wird dem Spiel vom angegebenem Kontos beigetreten, dafür wird das Attribut Spieler 2, auf den aufrufenden Benutzer gelegt
+     * und das Attribut "hasGame" innerhalb des aufrufenden Nutzkontos auf true gesetzt.
+     * @return einen String, der angibt, ob der Beitritt erfolgreich war
      * @throws IOException
      * @throws ParseException
      */
@@ -263,8 +260,9 @@ public class UserInteraction {
 
     //bsp: http://localhost:8080/player1place?column=1
     /**
-     * Gibt den Kontostand des Nutzers und jeweils die Menge der Güter, die er besitzt, aus, wenn ein Nutzer angemeldet ist
-     * @return einen String, der den Kontostand und die Güter des Nutzes ausgibt, oder, dass kein Nutzer angemeldet ist.
+     * Wirft eine Scheibe in die vom Nutzer angefragte Spalte, wenn er dran ist
+     * @param column - Spalte, in die die Scheibe geworfen werden  soll
+     * @return einen String, der angibt, ob der Zug erfolgreich war oder was falsch gelaufen ist
      * @throws IOException
      * @throws ParseException
      */
@@ -302,8 +300,10 @@ public class UserInteraction {
 
     //bsp: http://localhost:8080/player2place?column=1
     /**
-     * Gibt den Kontostand des Nutzers und jeweils die Menge der Güter, die er besitzt, aus, wenn ein Nutzer angemeldet ist
-     * @return einen String, der den Kontostand und die Güter des Nutzes ausgibt, oder, dass kein Nutzer angemeldet ist.
+     **
+     * Wirft eine Scheibe in die vom Nutzer angefragte Spalte, wenn er dran ist
+     * @param column - Spalte, in die die Scheibe geworfen werden  soll
+     * @return einen String, der angibt, ob der Zug erfolgreich war oder was falsch gelaufen ist
      * @throws IOException
      * @throws ParseException
      */
@@ -341,13 +341,11 @@ public class UserInteraction {
 
     //bsp: http://localhost:8080/checkLastMove
     /**
-     * Gibt den Kontostand des Nutzers und jeweils die Menge der Güter, die er besitzt, aus, wenn ein Nutzer angemeldet ist
-     * @return einen String, der den Kontostand und die Güter des Nutzes ausgibt, oder, dass kein Nutzer angemeldet ist.
-     * @throws IOException
-     * @throws ParseException
+     * Prüft welcher Spieler zuletzt seinen Zug gemacht hat und gibt aus welcher Spieler nun dran ist
+     * @return einen String, der angibt, welcher Spieler gerade am Zug ist
      */
     @GetMapping("/checkLastMove")
-    public String checkLastMove() throws IOException, ParseException {
+    public String checkLastMove() {
         String ausgabe = "";
 
         if(letzterZug.equals("Spieler1")) ausgabe = "Spieler 2 ist am Zug";
@@ -357,11 +355,134 @@ public class UserInteraction {
         return ausgabe;
     }
 
+    //bsp: http://localhost:8080/checkWinner
+    /**
+     * Prüft ob 4 mal dieselbe Farbe entweder horizontal, vertikal oder diagonal im "Spielbrett" zu finden ist,
+     * gibt diese aus, wenn es zutrifft, sonst einen leeren String
+     * @return einen String, der entweder leer ist, wenn noch kein Gewinner feststeht, oder je nachdem 'R' oder 'Y' enthält, wenn diese 4 mal dieselbe Farbe auftaucht
+     */
+    @GetMapping("/checkWinner")
+    public String checkWinner() throws IOException, ParseException {
+        String ausgabe = "";
+
+        Object o = new JSONParser().parse(new FileReader( "game.json"));
+        JSONObject js = (JSONObject) o;
+
+        //Horizontal prüfen
+        //Zeilen durchlaufen
+        for (int i=1; i<=6; i++) {
+
+            //spalten durchlaufen
+            for (int j=1; j<=4; j++) {
+
+                String zelleJ = (String) js.get("Feld" + i + j);
+                String zelleJPlus1 = (String) js.get("Feld" + i + (j+1));
+                String zelleJPlus2 = (String) js.get("Feld" + i + (j+2));
+                String zelleJPlus3 = (String) js.get("Feld" + i + (j+3));
+
+                if (       (!zelleJ.equals(" "))
+                        && (!zelleJPlus1.equals(" "))
+                        && (!zelleJPlus2.equals(" "))
+                        && (!zelleJPlus3.equals(" "))
+                        && (zelleJ.equals(zelleJPlus1))
+                        && (zelleJPlus1.equals(zelleJPlus2))
+                        && (zelleJPlus2.equals(zelleJPlus3))) {
+
+                    ausgabe = zelleJ;
+                    return ausgabe;
+                }
+            }
+        }
+
+
+        //Vertikal prüfen
+        //Spalten durchlaufen
+        for (int i=1; i<=7; i++){
+
+            //Zeilen durchlaufen
+            for (int j=1; j<=3; j++) {
+
+                String zelleI = (String) js.get("Feld" + j + i);
+                String zelleIPlus1 = (String) js.get("Feld" + (j+1) + i);
+                String zelleIPlus2 = (String) js.get("Feld" + (j+2) + i);
+                String zelleIPlus3 = (String) js.get("Feld" + (j+3) + i);
+
+                if(        (!zelleI.equals(" "))
+                        && (!zelleIPlus1.equals(" "))
+                        && (!zelleIPlus2.equals(" "))
+                        && (!zelleIPlus3.equals(" "))
+                        && (zelleI.equals(zelleIPlus1))
+                        && (zelleIPlus1.equals(zelleIPlus2))
+                        && (zelleIPlus2.equals(zelleIPlus3))) {
+
+                    ausgabe = zelleI;
+                    return ausgabe;
+                }
+            }
+        }
+
+
+
+        //Diagonal links oben bis rechts unten prüfen
+        //Zeilen bis zur 3. Zeile durchlaufen
+        for (int i=1; i<=3; i++){
+
+            //Spalten bis zur 3. Spalte durchlaufen
+            for (int j=1; j<=4; j++) {
+
+                String zelleIJ = (String) js.get("Feld" + i + j);
+                String zelleIPlus1JPlus1 = (String) js.get("Feld" + (i+1) + (j+1));
+                String zelleIPlus2JPlus2 = (String) js.get("Feld" + (i+2) + (j+1));
+                String zelleIPlus3JPlus3 = (String) js.get("Feld" + (i+3) + (j+1));
+
+                if(        (!zelleIJ.equals(" "))
+                        && (!zelleIPlus1JPlus1.equals(" "))
+                        && (!zelleIPlus2JPlus2.equals(" "))
+                        && (!zelleIPlus3JPlus3.equals(" "))
+                        && (zelleIJ.equals(zelleIPlus1JPlus1))
+                        && (zelleIPlus1JPlus1.equals(zelleIPlus2JPlus2))
+                        && (zelleIPlus2JPlus2.equals(zelleIPlus3JPlus3))) {
+
+                    ausgabe = zelleIJ;
+                    return ausgabe;
+                }
+            }
+        }
+
+
+        //Diagonal rechts oben bis links unten prüfen
+        //Zeilen bis zur 3. Zeile durchlaufen
+        for (int i=1; i<=3; i++){
+
+            //Spalten bis zur 3. Spalte durchlaufen
+            for (int j=3; j<=7; j++) {
+
+                String zelleIJ = (String) js.get("Feld" + i + j);
+                String zelleIPlus1JMinus1 = (String) js.get("Feld" + (i+1) + (j-1));
+                String zelleIPlus2JMinus2 = (String) js.get("Feld" + (i+2) + (j-2));
+                String zelleIPlus3JMinus3 = (String) js.get("Feld" + (i+3) + (j-3));
+
+                if(        (!zelleIJ.equals(" "))
+                        && (!zelleIPlus1JMinus1.equals(" "))
+                        && (!zelleIPlus2JMinus2.equals(" "))
+                        && (!zelleIPlus3JMinus3.equals(" "))
+                        && (zelleIJ.equals(zelleIPlus1JMinus1))
+                        && (zelleIPlus1JMinus1.equals(zelleIPlus2JMinus2))
+                        && (zelleIPlus2JMinus2.equals(zelleIPlus3JMinus3))) {
+
+                    ausgabe = zelleIJ;
+                    return ausgabe;
+                }
+            }
+        }
+        return ausgabe;
+    }
+
 
     //bsp: http://localhost:8080/visualize
     /**
-     * Gibt den Kontostand des Nutzers und jeweils die Menge der Güter, die er besitzt, aus, wenn ein Nutzer angemeldet ist
-     * @return einen String, der den Kontostand und die Güter des Nutzes ausgibt, oder, dass kein Nutzer angemeldet ist.
+     * Gibt das aktuelle "Spielbrett" formatiert in einem String aus
+     * @return einen String, der den Zustand des aktuellen "Spielbretts" enthält
      * @throws IOException
      * @throws ParseException
      */
@@ -436,7 +557,7 @@ public class UserInteraction {
     //bsp: http://localhost:8080/delete
     /**
      * Löscht das Konto des angemeldeten Benutzers, indem jede Variable auf den leeren String gesetzt wird.
-     * @return einen String, der ausgibt, welcher Fehler aufgetreten ist, oder ob es funktioniert hat
+     * @return einen String, der angibt, welcher Fehler aufgetreten ist, oder ob es funktioniert hat
      * @throws IOException
      * @throws ParseException
      */
