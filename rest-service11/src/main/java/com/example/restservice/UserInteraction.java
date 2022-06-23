@@ -22,6 +22,7 @@ public class UserInteraction {
     String Spieler1 = "";
     String Spieler2 = "";
     int aktuellDran = 1;
+    String letzterZug = "Spieler2";
 
     GameCreation gc = new GameCreation();
     UserCreation uc = new UserCreation();
@@ -271,7 +272,7 @@ public class UserInteraction {
     public String player1place(@RequestParam(value = "column") int column) throws IOException, ParseException {
         String ausgabe = "";
 
-        if(aktuellDran == 1){
+        if(letzterZug.equals("Spieler2")){
             Object o = new JSONParser().parse(new FileReader( "game.json"));
             JSONObject js = (JSONObject) o;
 
@@ -288,9 +289,9 @@ public class UserInteraction {
             file.write(js.toJSONString());
             file.close();
 
-            aktuellDran = 2;
+            letzterZug = "Spieler1";
 
-        } else if(aktuellDran == 1 && ausgabe == ""){
+        } else if(letzterZug.equals("Spieler2") && ausgabe == ""){
             ausgabe = "Diese Spalte ist bereits komplett gefüllt";
 
         } else ausgabe = "Sie sind aktuell nicht dran";
@@ -310,7 +311,7 @@ public class UserInteraction {
     public String player2place(@RequestParam(value = "column") int column) throws IOException, ParseException {
         String ausgabe = "";
 
-        if(aktuellDran == 2){
+        if(letzterZug.equals("Spieler1")){
             Object o = new JSONParser().parse(new FileReader( "game.json"));
             JSONObject js = (JSONObject) o;
 
@@ -327,12 +328,31 @@ public class UserInteraction {
             file.write(js.toJSONString());
             file.close();
 
-            aktuellDran = 1;
+            letzterZug = "Spieler2";
 
-        } else if(aktuellDran == 2 && ausgabe == ""){
+        } else if(letzterZug.equals("Spieler1") && ausgabe == ""){
             ausgabe = "Diese Spalte ist bereits komplett gefüllt";
 
         } else ausgabe = "Sie sind aktuell nicht dran";
+
+        return ausgabe;
+    }
+
+
+    //bsp: http://localhost:8080/checkLastMove
+    /**
+     * Gibt den Kontostand des Nutzers und jeweils die Menge der Güter, die er besitzt, aus, wenn ein Nutzer angemeldet ist
+     * @return einen String, der den Kontostand und die Güter des Nutzes ausgibt, oder, dass kein Nutzer angemeldet ist.
+     * @throws IOException
+     * @throws ParseException
+     */
+    @GetMapping("/checkLastMove")
+    public String checkLastMove() throws IOException, ParseException {
+        String ausgabe = "";
+
+        if(letzterZug.equals("Spieler1")) ausgabe = "Spieler 2 ist am Zug";
+
+        else ausgabe = "Spieler 1 ist am Zug";
 
         return ausgabe;
     }
