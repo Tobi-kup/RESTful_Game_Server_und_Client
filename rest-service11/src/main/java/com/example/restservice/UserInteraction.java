@@ -145,6 +145,7 @@ public class UserInteraction {
     @GetMapping("/createSingleplayerGame")
     public String createSingleplayerGame() throws IOException, ParseException {
         String ausgabe = "";
+        letzterZug = "Spieler2";
         Spieler1 = users[aktuellerNutzer];
         gc.newGame();
 
@@ -288,6 +289,8 @@ public class UserInteraction {
             Object o = new JSONParser().parse(new FileReader( "game.json"));
             JSONObject js = (JSONObject) o;
 
+            if(column > 7) return "So viele Spalten gibt es nicht.";
+
             for(int i=6; i>=1; i--) {
                 String zelle = (String) js.get("Feld" + i + column);
                 if (zelle.equals(" ")) {
@@ -297,14 +300,14 @@ public class UserInteraction {
                 }
             }
 
+            if(letzterZug.equals("Spieler2") && ausgabe.equals("")) return "Diese Spalte ist bereits komplett gefüllt";
+
             FileWriter file = new FileWriter("game.json");
             file.write(js.toJSONString());
             file.close();
 
             letzterZug = "Spieler1";
 
-        } else if(letzterZug.equals("Spieler2") && ausgabe == ""){
-            ausgabe = "Diese Spalte ist bereits komplett gefüllt";
 
         } else ausgabe = "Sie sind aktuell nicht dran";
 
@@ -325,6 +328,8 @@ public class UserInteraction {
     public String player2place(@RequestParam(value = "column") int column) throws IOException, ParseException {
         String ausgabe = "";
 
+        if(column > 7) return "So viele Spalten gibt es nicht.";
+
         if(letzterZug.equals("Spieler1")){
             Object o = new JSONParser().parse(new FileReader( "game.json"));
             JSONObject js = (JSONObject) o;
@@ -338,14 +343,14 @@ public class UserInteraction {
                 }
             }
 
+            if(letzterZug.equals("Spieler1") && ausgabe.equals("")) return "Diese Spalte ist bereits komplett gefüllt";
+
             FileWriter file = new FileWriter("game.json");
             file.write(js.toJSONString());
             file.close();
 
             letzterZug = "Spieler2";
 
-        } else if(letzterZug.equals("Spieler1") && ausgabe == ""){
-            ausgabe = "Diese Spalte ist bereits komplett gefüllt";
 
         } else ausgabe = "Sie sind aktuell nicht dran";
 
@@ -377,7 +382,7 @@ public class UserInteraction {
      */
     @GetMapping("/checkWinner")
     public String checkWinner() throws IOException, ParseException {
-        String ausgabe = "";
+        String ausgabe = " ";
 
         Object o = new JSONParser().parse(new FileReader( "game.json"));
         JSONObject js = (JSONObject) o;
@@ -442,12 +447,12 @@ public class UserInteraction {
         for (int i=1; i<=3; i++){
 
             //Spalten bis zur 3. Spalte durchlaufen
-            for (int j=1; j<=4; j++) {
+            for (int j=1; j<=3; j++) {
 
                 String zelleIJ = (String) js.get("Feld" + i + j);
                 String zelleIPlus1JPlus1 = (String) js.get("Feld" + (i+1) + (j+1));
-                String zelleIPlus2JPlus2 = (String) js.get("Feld" + (i+2) + (j+1));
-                String zelleIPlus3JPlus3 = (String) js.get("Feld" + (i+3) + (j+1));
+                String zelleIPlus2JPlus2 = (String) js.get("Feld" + (i+2) + (j+2));
+                String zelleIPlus3JPlus3 = (String) js.get("Feld" + (i+3) + (j+3));
 
                 if(        (!zelleIJ.equals(" "))
                         && (!zelleIPlus1JPlus1.equals(" "))
@@ -468,8 +473,8 @@ public class UserInteraction {
         //Zeilen bis zur 3. Zeile durchlaufen
         for (int i=1; i<=3; i++){
 
-            //Spalten bis zur 3. Spalte durchlaufen
-            for (int j=3; j<=7; j++) {
+            //Spalten von der 4. zu der 7. Spalte durchlaufen
+            for (int j=4; j<=7; j++) {
 
                 String zelleIJ = (String) js.get("Feld" + i + j);
                 String zelleIPlus1JMinus1 = (String) js.get("Feld" + (i+1) + (j-1));
