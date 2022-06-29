@@ -13,8 +13,9 @@ public class GameCreation {
     public GameCreation(){}
 
     /**
-     * Erstellt eine .json Datei mit den übergebenen Parametern name und password und vordefinierten
-     * Parametern balance und die Menge der 10 Güter.
+     * Erstellt eine .json Datei mit den Parametern Spieler1 und Spieler2
+     * für die Teilnehmer des Spiels und einzelne Parameter für die Spielfelder
+     * mit Feld[Zeile][Spalte].
      *
      * @throws IOException bei Problemen mit FileWriter
      */
