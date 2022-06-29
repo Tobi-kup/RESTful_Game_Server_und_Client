@@ -14,7 +14,7 @@ public class UserCreation {
 
      /**
       * Erstellt eine .json Datei mit den übergebenen Parametern name und password und vordefinierten
-      * Parametern balance und die Menge der 10 Güter.
+      * Parameter hasGame.
       *
       * @param name für Parameter name innerhalb der .json und dem Namen der Datei für den FileWriter
       * @param password für Parameter password innerhalb der .json
