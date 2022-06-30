@@ -140,7 +140,7 @@ public class Client {
                 //Gegen anderen Spieler
                 if(eingabe.equals("m")) {
                     System.out.println(rt.getForObject("http://localhost:8080/createMultiplayerGame", String.class));
-                    while(!rt.getForObject("http://localhost:8080/checkIfStartable", String.class).equals("Das Spiel kann gestartet werden")){ Thread.sleep(1000);;}
+                    while(!rt.getForObject("http://localhost:8080/checkIfStartable", String.class).equals("Das Spiel kann gestartet werden")){ Thread.sleep(1000);}
 
                     while(rt.getForObject("http://localhost:8080/checkWinner", String.class).equals(" ")) {
                         Thread.sleep(1000);
@@ -204,7 +204,7 @@ public class Client {
                 if(ausgabe.equals("Sie sind dem Spiel erfolreich beigetreten.")){
 
                     while (rt.getForObject("http://localhost:8080/checkWinner", String.class).equals(" ")) {
-
+                        Thread.sleep(1000);
                         //Nachdem Spieler 1 seinen Zug gemacht hat, macht Spieler 2 seinen
                         if (rt.getForObject("http://localhost:8080/checkLastMove", String.class).equals("Spieler 2 ist am Zug")) {
                             System.out.println(rt.getForObject("http://localhost:8080/visualize", String.class));
