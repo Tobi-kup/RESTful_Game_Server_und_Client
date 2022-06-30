@@ -127,10 +127,6 @@ public class ClientLogoutWhilePlaying {
 
                     //Fortsetzung vom Multiplayer game aus Sicht von Spieler 1
                     else if (spieler1.equals(name) && gameFormat.equals("multiplayer")) {
-                        System.out.println(ui.visualize());
-                        while (!ui.checkIfStartable().equals("Das Spiel kann gestartet werden")) {
-                            int setzeDieseVariableEinfachSoAuf5 = 5;
-                        }
 
                         while (ui.checkWinner().equals(" ")) {
                             //Nachdem Spieler 2 seinen Zug gemacht hat, macht Spieler 1 seinen
@@ -156,44 +152,61 @@ public class ClientLogoutWhilePlaying {
                                 }
                                 System.out.println(ui.visualize());
                             }
-
-                            if (ui.checkWinner().equals("R")) System.out.println("Du hast gewonnen!");
-                            else if (ui.checkWinner().equals("Y")) System.out.println("Du hast leider verloren");
+                            else {
+                                eingabe = s.nextLine();
+                                if (eingabe.equals("logout")) {
+                                    angemeldet = false;
+                                    break;
+                                }
+                            }
                         }
+                        if (ui.checkWinner().equals("R")) System.out.println("Du hast gewonnen!");
+                        else if (ui.checkWinner().equals("Y")) System.out.println("Du hast leider verloren");
                     }
 
 
                     //Fortsetzung vom Multiplayer game aus Sicht von Spieler 2
                     else if (spieler2.equals(name) && gameFormat.equals("multiplayer")) {
-                        System.out.println(ui.visualize());
-                        //Nachdem Spieler 1 seinen Zug gemacht hat, macht Spieler 2 seinen
-                        if (ui.checkLastMove().equals("Spieler 2 ist am Zug")) {
-                            System.out.println(ui.visualize());
-                            while (ui.checkLastMove().equals("Spieler 2 ist am Zug")) {
-                                System.out.println("\nWirf die Scheibe in die Spalte: (1-7)");
+                        while (ui.checkWinner().equals(" ")) {
 
-                                //Mitten im Spiel ausloggen
+                            //Nachdem Spieler 1 seinen Zug gemacht hat, macht Spieler 2 seinen
+                            if (ui.checkLastMove().equals("Spieler 2 ist am Zug")) {
+                                System.out.println(ui.visualize());
+                                while (ui.checkLastMove().equals("Spieler 2 ist am Zug")) {
+                                    System.out.println("\nWirf die Scheibe in die Spalte: (1-7)");
+
+                                    //Mitten im Spiel ausloggen
+                                    eingabe = s.nextLine();
+                                    if (eingabe.equals("logout")) {
+                                        angemeldet = false;
+                                        break;
+
+                                    } else {
+                                        int spalte = Integer.parseInt(eingabe);
+                                        System.out.println(ui.player2place(spalte));
+                                    }
+                                }
+                                if (eingabe.equals("logout")) {
+                                    angemeldet = false;
+                                    break;
+                                }
+                                System.out.println(ui.visualize());
+                            }
+                            else {
                                 eingabe = s.nextLine();
                                 if (eingabe.equals("logout")) {
                                     angemeldet = false;
                                     break;
-
-                                } else {
-                                    int spalte = Integer.parseInt(eingabe);
-                                    System.out.println(ui.player2place(spalte));
                                 }
                             }
-                            if (eingabe.equals("logout")) {
-                                angemeldet = false;
-                                break;
-                            }
-                            System.out.println(ui.visualize());
                         }
-
                         if (ui.checkWinner().equals("Y")) System.out.println("Du hast gewonnen!");
                         else if (ui.checkWinner().equals("R")) System.out.println("Du hast leider verloren");
                     }
-                } else {
+                }
+
+                else {
+
                     eingabe = s.nextLine();
 
 
@@ -266,14 +279,14 @@ public class ClientLogoutWhilePlaying {
                                     }
                                     System.out.println(ui.visualize());
                                 }
-
-                                if (ui.checkWinner().equals("R")) System.out.println("Du hast gewonnen!");
-                                else if (ui.checkWinner().equals("Y")) System.out.println("Du hast leider verloren");
                             }
+                            if (ui.checkWinner().equals("R")) System.out.println("Du hast gewonnen!");
+                            else if (ui.checkWinner().equals("Y")) System.out.println("Du hast leider verloren");
+                        }
 
 
                             //Gegen den Computer
-                        } else if (eingabe.equals("s")) {
+                        else if (eingabe.equals("s")) {
                             gameFormat = "singeplayer";
                             System.out.println(ui.createSingleplayerGame());
 
@@ -326,37 +339,47 @@ public class ClientLogoutWhilePlaying {
                         ausgabe = ui.join(enemy);
                         if (ausgabe.equals("Sie sind dem Spiel erfolreich beigetreten.")) {
                             spieler2 = name;
+                            System.out.println(ausgabe);
 
-                            //Nachdem Spieler 1 seinen Zug gemacht hat, macht Spieler 2 seinen
-                            if (ui.checkLastMove().equals("Spieler 2 ist am Zug")) {
-                                System.out.println(ui.visualize());
-                                while (ui.checkLastMove().equals("Spieler 2 ist am Zug")) {
-                                    System.out.println("\nWirf die Scheibe in die Spalte: (1-7)");
-
-                                    //Mitten im Spiel ausloggen
-                                    eingabe = s.nextLine();
-                                    if (eingabe.equals("logout")) {
-                                        angemeldet = false;
-                                        break;
-
-                                    } else {
-                                        int spalte = Integer.parseInt(eingabe);
-                                        System.out.println(ui.player2place(spalte));
-                                    }
-                                }
+                            while(!ui.checkLastMove().equals("Spieler 2 ist am Zug")) {
+                                eingabe = s.nextLine();
                                 if (eingabe.equals("logout")) {
                                     angemeldet = false;
                                     break;
-                                }
-                                System.out.println(ui.visualize());
+
+                                } else System.out.println("Ungueltige Eingabe");
                             }
 
+                            while (ui.checkWinner().equals(" ")) {
+
+                                //Nachdem Spieler 1 seinen Zug gemacht hat, macht Spieler 2 seinen
+                                if (ui.checkLastMove().equals("Spieler 2 ist am Zug")) {
+                                    System.out.println(ui.visualize());
+                                    while (ui.checkLastMove().equals("Spieler 2 ist am Zug")) {
+                                        System.out.println("\nWirf die Scheibe in die Spalte: (1-7)");
+
+                                        //Mitten im Spiel ausloggen
+                                        eingabe = s.nextLine();
+                                        if (eingabe.equals("logout")) {
+                                            angemeldet = false;
+                                            break;
+
+                                        } else {
+                                            int spalte = Integer.parseInt(eingabe);
+                                            System.out.println(ui.player2place(spalte));
+                                        }
+                                    }
+                                    if (eingabe.equals("logout")) {
+                                        angemeldet = false;
+                                        break;
+                                    }
+                                    System.out.println(ui.visualize());
+                                }
+                            }
                             if (ui.checkWinner().equals("Y")) System.out.println("Du hast gewonnen!");
                             else if (ui.checkWinner().equals("R")) System.out.println("Du hast leider verloren");
 
-
                         } else System.out.println(ausgabe);
-
                     }
 
 

@@ -11,7 +11,7 @@ import java.util.*;
 
 public class Client {
 
-    public static void main(String[] args) throws IOException, ParseException {
+    public static void main(String[] args) throws IOException, ParseException, InterruptedException {
 
         /**
          * 2 Attribute vom Typ String, zur späteren Speicherung vom Namen und Password des Nutzkontos
@@ -140,27 +140,28 @@ public class Client {
                 //Gegen anderen Spieler
                 if(eingabe.equals("m")) {
                     System.out.println(rt.getForObject("http://localhost:8080/createMultiplayerGame", String.class));
-                    while(!rt.getForObject("http://localhost:8080/checkIfStartable", String.class).equals("Das Spiel kann gestartet werden")){ int setzeDieseVariableEinfachSoAuf5 = 5;}
+                    while(!rt.getForObject("http://localhost:8080/checkIfStartable", String.class).equals("Das Spiel kann gestartet werden")){ Thread.sleep(1000);;}
 
                     while(rt.getForObject("http://localhost:8080/checkWinner", String.class).equals(" ")) {
-
+                        Thread.sleep(1000);
                         //Nachdem Spieler 2 seinen Zug gemacht hat, macht Spieler 1 seinen
                         if (rt.getForObject("http://localhost:8080/checkLastMove", String.class).equals("Spieler 1 ist am Zug")) {
-                            while (rt.getForObject("http://localhost:8080/checkLastMove", String.class).equals("Spieler 1 ist am Zug")){
-                            System.out.println("\nWirf die Scheibe in die Spalte: (1-7)");
-                            int spalte = s.nextInt();
-                            System.out.println(rt.getForObject("http://localhost:8080/player1place?column=" + spalte + "", String.class));
-                        }
+                            System.out.println(rt.getForObject("http://localhost:8080/visualize", String.class));
+                            while (rt.getForObject("http://localhost:8080/checkLastMove", String.class).equals("Spieler 1 ist am Zug")) {
+                                System.out.println("\nWirf die Scheibe in die Spalte: (1-7)");
+                                int spalte = s.nextInt();
+                                System.out.println(rt.getForObject("http://localhost:8080/player1place?column=" + spalte + "", String.class));
+                            }
                             System.out.println(rt.getForObject("http://localhost:8080/visualize", String.class));
                         }
-
+                    }
                         if (rt.getForObject("http://localhost:8080/checkWinner", String.class).equals("R")) System.out.println("Du hast gewonnen!");
                         else System.out.println("Du hast leider verloren");
                     }
 
 
                 //Gegen den Computer
-                } else if(eingabe.equals("s")){
+                else if(eingabe.equals("s")){
                     System.out.println(rt.getForObject("http://localhost:8080/createSingleplayerGame", String.class));
 
                     ausgabe = rt.getForObject("http://localhost:8080/checkWinner", String.class);
@@ -202,14 +203,18 @@ public class Client {
                 ausgabe = rt.getForObject("http://localhost:8080/join?name="+enemy+"", String.class);
                 if(ausgabe.equals("Sie sind dem Spiel erfolreich beigetreten.")){
 
-                    //Nachdem Spieler 1 seinen Zug gemacht hat, macht Spieler 2 seinen
-                    if (rt.getForObject("http://localhost:8080/checkLastMove", String.class).equals("Spieler 2 ist am Zug")) {
-                        while (rt.getForObject("http://localhost:8080/checkLastMove", String.class).equals("Spieler 2 ist am Zug")) {
-                            System.out.println("\nWirf die Scheibe in die Spalte: (1-7)");
-                            int spalte = s.nextInt();
-                            System.out.println(rt.getForObject("http://localhost:8080/player2place?column=" + spalte + "", String.class));
+                    while (rt.getForObject("http://localhost:8080/checkWinner", String.class).equals(" ")) {
+
+                        //Nachdem Spieler 1 seinen Zug gemacht hat, macht Spieler 2 seinen
+                        if (rt.getForObject("http://localhost:8080/checkLastMove", String.class).equals("Spieler 2 ist am Zug")) {
+                            System.out.println(rt.getForObject("http://localhost:8080/visualize", String.class));
+                            while (rt.getForObject("http://localhost:8080/checkLastMove", String.class).equals("Spieler 2 ist am Zug")) {
+                                System.out.println("\nWirf die Scheibe in die Spalte: (1-7)");
+                                int spalte = s.nextInt();
+                                System.out.println(rt.getForObject("http://localhost:8080/player2place?column=" + spalte + "", String.class));
+                            }
+                            System.out.println(rt.getForObject("http://localhost:8080/visualize", String.class));
                         }
-                        System.out.println(rt.getForObject("http://localhost:8080/visualize", String.class));
                     }
 
                     if (rt.getForObject("http://localhost:8080/checkWinner", String.class).equals("Y")) System.out.println("Du hast gewonnen!");
