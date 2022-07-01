@@ -20,6 +20,7 @@ public class ClientLogoutWhilePlaying {
         String spieler1 = "";
         String spieler2 = "";
         String gameFormat = "";
+        String enemy = "";
 
         String eingabe = "";
 
@@ -85,8 +86,8 @@ public class ClientLogoutWhilePlaying {
 
                     //Fortsetzung vom Singleplayer game
                     if (spieler1.equals(name) && gameFormat.equals("singeplayer")) {
-                        System.out.println(ui.visualize());
-                        while (ui.checkWinner().equals(" ")) {
+                        System.out.println(ui.visualize(name));
+                        while (ui.checkWinner(name).equals(" ")) {
 
                             //Der User macht seinen Zug
                             if (ui.checkLastMove().equals("Spieler 1 ist am Zug")) {
@@ -101,37 +102,44 @@ public class ClientLogoutWhilePlaying {
 
                                     } else {
                                         int spalte = Integer.parseInt(eingabe);
-                                        System.out.println(ui.player1place(spalte));
+                                        System.out.println(ui.player1place(spalte, name));
                                     }
                                 }
                                 if (eingabe.equals("logout")) {
                                     angemeldet = false;
                                     break;
                                 }
-                                System.out.println(ui.visualize());
+                                System.out.println(ui.visualize(name));
 
                                 //Der Computer macht so lange zufällige Züge, bis einer gültig ist, denn er kann versuchen auf eine bereits gefüllte Zeile werfen zu wollen
                             } else {
                                 System.out.println("Der Computer hat folgenden Zug gemacht:");
                                 while (ui.checkLastMove().equals("Spieler 2 ist am Zug")) {
-                                    ui.player2place(r.nextInt(6) + 1);
+                                    ui.player2place(r.nextInt(6) + 1, name);
                                 }
-                                System.out.println(ui.visualize());
+                                System.out.println(ui.visualize(name));
                             }
                         }
 
-                        if (ui.checkWinner().equals("R")) System.out.println("Du hast gewonnen!");
-                        else if (ui.checkWinner().equals("Y")) System.out.println("Du hast leider verloren");
+                        if (ui.checkWinner(name).equals("R")){
+                            System.out.println("Du hast gewonnen!");
+                            spieler1 = "";
+                        }
+
+                        else if (ui.checkWinner(name).equals("Y")){
+                            System.out.println("Du hast leider verloren");
+                            spieler1 = "";
+                        }
                     }
 
 
                     //Fortsetzung vom Multiplayer game aus Sicht von Spieler 1
                     else if (spieler1.equals(name) && gameFormat.equals("multiplayer")) {
 
-                        while (ui.checkWinner().equals(" ")) {
+                        while (ui.checkWinner(name).equals(" ")) {
                             //Nachdem Spieler 2 seinen Zug gemacht hat, macht Spieler 1 seinen
                             if (ui.checkLastMove().equals("Spieler 1 ist am Zug")) {
-                                System.out.println(ui.visualize());
+                                System.out.println(ui.visualize(name));
                                 while (ui.checkLastMove().equals("Spieler 1 ist am Zug")) {
                                     System.out.println("\nWirf die Scheibe in die Spalte: (1-7)");
 
@@ -143,14 +151,14 @@ public class ClientLogoutWhilePlaying {
 
                                     } else {
                                         int spalte = Integer.parseInt(eingabe);
-                                        System.out.println(ui.player1place(spalte));
+                                        System.out.println(ui.player1place(spalte, name));
                                     }
                                 }
                                 if (eingabe.equals("logout")) {
                                     angemeldet = false;
                                     break;
                                 }
-                                System.out.println(ui.visualize());
+                                System.out.println(ui.visualize(name));
                             }
                             else {
                                 eingabe = s.nextLine();
@@ -160,18 +168,25 @@ public class ClientLogoutWhilePlaying {
                                 }
                             }
                         }
-                        if (ui.checkWinner().equals("R")) System.out.println("Du hast gewonnen!");
-                        else if (ui.checkWinner().equals("Y")) System.out.println("Du hast leider verloren");
+                        if (ui.checkWinner(name).equals("R")){
+                            System.out.println("Du hast gewonnen!");
+                            spieler1 = "";
+                        }
+
+                        else if (ui.checkWinner(name).equals("Y")){
+                            System.out.println("Du hast leider verloren");
+                            spieler1 = "";
+                        }
                     }
 
 
                     //Fortsetzung vom Multiplayer game aus Sicht von Spieler 2
                     else if (spieler2.equals(name) && gameFormat.equals("multiplayer")) {
-                        while (ui.checkWinner().equals(" ")) {
+                        while (ui.checkWinner(enemy).equals(" ")) {
 
                             //Nachdem Spieler 1 seinen Zug gemacht hat, macht Spieler 2 seinen
                             if (ui.checkLastMove().equals("Spieler 2 ist am Zug")) {
-                                System.out.println(ui.visualize());
+                                System.out.println(ui.visualize(enemy));
                                 while (ui.checkLastMove().equals("Spieler 2 ist am Zug")) {
                                     System.out.println("\nWirf die Scheibe in die Spalte: (1-7)");
 
@@ -183,14 +198,14 @@ public class ClientLogoutWhilePlaying {
 
                                     } else {
                                         int spalte = Integer.parseInt(eingabe);
-                                        System.out.println(ui.player2place(spalte));
+                                        System.out.println(ui.player2place(spalte, enemy));
                                     }
                                 }
                                 if (eingabe.equals("logout")) {
                                     angemeldet = false;
                                     break;
                                 }
-                                System.out.println(ui.visualize());
+                                System.out.println(ui.visualize(enemy));
                             }
                             else {
                                 eingabe = s.nextLine();
@@ -200,8 +215,15 @@ public class ClientLogoutWhilePlaying {
                                 }
                             }
                         }
-                        if (ui.checkWinner().equals("Y")) System.out.println("Du hast gewonnen!");
-                        else if (ui.checkWinner().equals("R")) System.out.println("Du hast leider verloren");
+                        if (ui.checkWinner(enemy).equals("Y")){
+                            System.out.println("Du hast gewonnen!");
+                            spieler2 = "";
+                        }
+
+                        else if (ui.checkWinner(enemy).equals("R")){
+                            System.out.println("Du hast leider verloren");
+                            spieler2 = "";
+                        }
                     }
                 }
 
@@ -223,9 +245,9 @@ public class ClientLogoutWhilePlaying {
 
                     //temporär für die manuelle Ausgabe des Spielbretts gewesen
                     else if (eingabe.equals("visualize")) {
-                        ui.createSingleplayerGame();
-                        ui.player1place(5);
-                        System.out.println(ui.visualize());
+                        ui.createSingleplayerGame(name);
+                        ui.player1place(5, name);
+                        System.out.println(ui.visualize(name));
                     }
 
 
@@ -240,7 +262,7 @@ public class ClientLogoutWhilePlaying {
                         //Gegen anderen Spieler
                         if (eingabe.equals("m")) {
                             gameFormat = "multiplayer";
-                            System.out.println(ui.createMultiplayerGame());
+                            System.out.println(ui.createMultiplayerGame(name));
                             while (!ui.checkIfStartable().equals("Das Spiel kann gestartet werden")) {
                                 eingabe = s.nextLine();
                                 if (eingabe.equals("logout")) {
@@ -255,10 +277,10 @@ public class ClientLogoutWhilePlaying {
                                 break;
                             }
 
-                            while (ui.checkWinner().equals(" ")) {
+                            while (ui.checkWinner(name).equals(" ")) {
                                 //Nachdem Spieler 2 seinen Zug gemacht hat, macht Spieler 1 seinen
                                 if (ui.checkLastMove().equals("Spieler 1 ist am Zug")) {
-                                    System.out.println(ui.visualize());
+                                    System.out.println(ui.visualize(name));
                                     while (ui.checkLastMove().equals("Spieler 1 ist am Zug")) {
                                         System.out.println("\nWirf die Scheibe in die Spalte: (1-7)");
 
@@ -270,27 +292,34 @@ public class ClientLogoutWhilePlaying {
 
                                         } else {
                                             int spalte = Integer.parseInt(eingabe);
-                                            System.out.println(ui.player1place(spalte));
+                                            System.out.println(ui.player1place(spalte, name));
                                         }
                                     }
                                     if (eingabe.equals("logout")) {
                                         angemeldet = false;
                                         break;
                                     }
-                                    System.out.println(ui.visualize());
+                                    System.out.println(ui.visualize(name));
                                 }
                             }
-                            if (ui.checkWinner().equals("R")) System.out.println("Du hast gewonnen!");
-                            else if (ui.checkWinner().equals("Y")) System.out.println("Du hast leider verloren");
+                            if (ui.checkWinner(name).equals("R")){
+                                System.out.println("Du hast gewonnen!");
+                                spieler1 = "";
+                            }
+
+                            else if (ui.checkWinner(name).equals("Y")){
+                                System.out.println("Du hast leider verloren");
+                                spieler1 = "";
+                            }
                         }
 
 
                             //Gegen den Computer
                         else if (eingabe.equals("s")) {
                             gameFormat = "singeplayer";
-                            System.out.println(ui.createSingleplayerGame());
+                            System.out.println(ui.createSingleplayerGame(name));
 
-                            while (ui.checkWinner().equals(" ")) {
+                            while (ui.checkWinner(name).equals(" ")) {
 
                                 //Der User macht seinen Zug
                                 if (ui.checkLastMove().equals("Spieler 1 ist am Zug")) {
@@ -305,27 +334,34 @@ public class ClientLogoutWhilePlaying {
 
                                         } else {
                                             int spalte = Integer.parseInt(eingabe);
-                                            System.out.println(ui.player1place(spalte));
+                                            System.out.println(ui.player1place(spalte, name));
                                         }
                                     }
                                     if (eingabe.equals("logout")) {
                                         angemeldet = false;
                                         break;
                                     }
-                                    System.out.println(ui.visualize());
+                                    System.out.println(ui.visualize(name));
 
                                     //Der Computer macht so lange zufällige Züge, bis einer gültig ist, denn er kann versuchen auf eine bereits gefüllte Zeile werfen zu wollen
                                 } else {
                                     System.out.println("Der Computer hat folgenden Zug gemacht:");
                                     while (ui.checkLastMove().equals("Spieler 2 ist am Zug")) {
-                                        ui.player2place(r.nextInt(6) + 1);
+                                        ui.player2place(r.nextInt(6) + 1, name);
                                     }
-                                    System.out.println(ui.visualize());
+                                    System.out.println(ui.visualize(name));
                                 }
                             }
 
-                            if (ui.checkWinner().equals("R")) System.out.println("Du hast gewonnen!");
-                            else if (ui.checkWinner().equals("Y")) System.out.println("Du hast leider verloren");
+                            if (ui.checkWinner(name).equals("R")){
+                                System.out.println("Du hast gewonnen!");
+                                spieler1 = "";
+                            }
+
+                            else if (ui.checkWinner(name).equals("Y")){
+                                System.out.println("Du hast leider verloren");
+                                spieler1 = "";
+                            }
 
                         } else System.out.println("Keine gueltige Eingabe");
                     }
@@ -335,7 +371,7 @@ public class ClientLogoutWhilePlaying {
                     else if (eingabe.equals("join")) {
                         gameFormat = "multiplayer";
                         System.out.println("Geben Sie den Namen des Spielers ein, mit dem Sie spielen wollen, sofern er ein Spiel gestartet hat.");
-                        String enemy = s.nextLine();
+                        enemy = s.nextLine();
                         ausgabe = ui.join(enemy);
                         if (ausgabe.equals("Sie sind dem Spiel erfolreich beigetreten.")) {
                             spieler2 = name;
@@ -350,11 +386,11 @@ public class ClientLogoutWhilePlaying {
                                 } else System.out.println("Ungueltige Eingabe");
                             }
 
-                            while (ui.checkWinner().equals(" ")) {
+                            while (ui.checkWinner(enemy).equals(" ")) {
 
                                 //Nachdem Spieler 1 seinen Zug gemacht hat, macht Spieler 2 seinen
                                 if (ui.checkLastMove().equals("Spieler 2 ist am Zug")) {
-                                    System.out.println(ui.visualize());
+                                    System.out.println(ui.visualize(enemy));
                                     while (ui.checkLastMove().equals("Spieler 2 ist am Zug")) {
                                         System.out.println("\nWirf die Scheibe in die Spalte: (1-7)");
 
@@ -366,18 +402,29 @@ public class ClientLogoutWhilePlaying {
 
                                         } else {
                                             int spalte = Integer.parseInt(eingabe);
-                                            System.out.println(ui.player2place(spalte));
+                                            System.out.println(ui.player2place(spalte, enemy));
                                         }
                                     }
                                     if (eingabe.equals("logout")) {
                                         angemeldet = false;
                                         break;
                                     }
-                                    System.out.println(ui.visualize());
+                                    System.out.println(ui.visualize(enemy));
+                                }
+                                if (eingabe.equals("logout")) {
+                                    angemeldet = false;
+                                    break;
                                 }
                             }
-                            if (ui.checkWinner().equals("Y")) System.out.println("Du hast gewonnen!");
-                            else if (ui.checkWinner().equals("R")) System.out.println("Du hast leider verloren");
+                            if (ui.checkWinner(enemy).equals("Y")){
+                                System.out.println("Du hast gewonnen!");
+                                spieler2 = "";
+                            }
+
+                            else if (ui.checkWinner(enemy).equals("R")){
+                                System.out.println("Du hast leider verloren");
+                                spieler2 = "";
+                            }
 
                         } else System.out.println(ausgabe);
                     }

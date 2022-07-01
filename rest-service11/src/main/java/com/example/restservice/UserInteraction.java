@@ -139,15 +139,16 @@ public class UserInteraction {
     /**
      * Erstellt ein Spiel zwischen dem Nutzer und dem Computer
      * @return einen String, der angibt, dass das Spiel gestartet wurde
+     * @param name -Nötig, um auf die richtige Spieldatei zuzugreifen
      * @throws IOException
      * @throws ParseException
      */
     @GetMapping("/createSingleplayerGame")
-    public String createSingleplayerGame() throws IOException, ParseException {
+    public String createSingleplayerGame(@RequestParam(value = "name") String name) throws IOException, ParseException {
         String ausgabe = "";
         letzterZug = "Spieler2";
-        Spieler1 = users[aktuellerNutzer];
-        gc.newGame();
+        Spieler1 = name;
+        gc.newGame(Spieler1);
 
 
         //Das boolean-Attribut "hasGame" in der JSON-Datei des aufrufenden Nutzers wird auf true gesetzt
@@ -155,20 +156,20 @@ public class UserInteraction {
         JSONObject js = (JSONObject) o;
         js.put("hasGame", true);
 
-        FileWriter file = new FileWriter(  Spieler1 + ".json");
+        FileWriter file = new FileWriter(Spieler1 + ".json");
         file.write(js.toJSONString());
         file.close();
 
 
         //Das Attribut "Spieler1" in der JSON-Datei für den Zustand des Spiels wird auf den aufrufenden Nutzer gesetzt
         //Und Das Attribut "Spieler2" auf "Computer"
-        Object og = new JSONParser().parse(new FileReader( "game.json"));
+        Object og = new JSONParser().parse(new FileReader(Spieler1 + "game.json"));
         JSONObject jsg = (JSONObject) og;
         jsg.put("Spieler1", Spieler1);
         jsg.put("Spieler2", "Computer");
 
 
-        FileWriter fileg = new FileWriter(  "game.json");
+        FileWriter fileg = new FileWriter(Spieler1 + "game.json");
         fileg.write(jsg.toJSONString());
         fileg.close();
 
@@ -182,14 +183,15 @@ public class UserInteraction {
     /**
      * Erstellt ein Spiel mit dem Nutzer als Spieler 1 und setzt das Attribut "hasGame" innerhalb des Nutzkontos auf true.
      * @return einen String, der angibt, dass ein Spiel erstellt wurde und nun auf einen 2. Spieler gewartet wird
+     * @param name -Nötig, um auf die richtige Spieldatei zuzugreifen
      * @throws IOException
      * @throws ParseException
      */
     @GetMapping("/createMultiplayerGame")
-    public String createMultiplayerGame() throws IOException, ParseException {
+    public String createMultiplayerGame(@RequestParam(value = "name") String name) throws IOException, ParseException {
         String ausgabe = "";
-        Spieler1 = users[aktuellerNutzer];
-        gc.newGame();
+        Spieler1 = name;
+        gc.newGame(Spieler1);
 
 
         //Das boolean-Attribut "hasGame" in der JSON-Datei des aufrufenden Nutzers wird auf true gesetzt
@@ -203,12 +205,12 @@ public class UserInteraction {
 
 
         //Das Attribut "Spieler1" in der JSON-Datei für den Zustand des Spiels wird auf den aufrufenden Nutzer gesetzt
-        Object og = new JSONParser().parse(new FileReader( "game.json"));
+        Object og = new JSONParser().parse(new FileReader( Spieler1 + "game.json"));
         JSONObject jsg = (JSONObject) og;
         jsg.put("Spieler1", Spieler1);
 
 
-        FileWriter fileg = new FileWriter(  "game.json");
+        FileWriter fileg = new FileWriter(  Spieler1 + "game.json");
         fileg.write(jsg.toJSONString());
         fileg.close();
 
@@ -222,6 +224,7 @@ public class UserInteraction {
     /**
      * Es wird dem Spiel vom angegebenem Kontos beigetreten, dafür wird das Attribut Spieler 2, auf den aufrufenden Benutzer gelegt
      * und das Attribut "hasGame" innerhalb des aufrufenden Nutzkontos auf true gesetzt.
+     * @param name -Nötig, um auf die richtige Spieldatei zuzugreifen
      * @return einen String, der angibt, ob der Beitritt erfolgreich war
      * @throws IOException
      * @throws ParseException
@@ -250,7 +253,7 @@ public class UserInteraction {
 
 
         //Nachschauen, ob das Spiel bereits 2 Spieler enthält, also ob es schon läuft
-        Object og = new JSONParser().parse(new FileReader("game.json"));
+        Object og = new JSONParser().parse(new FileReader(name + "game.json"));
         JSONObject jsg = (JSONObject) og;
         String player2 = (String) jsg.get("Spieler2");
 
@@ -262,7 +265,7 @@ public class UserInteraction {
             ausgabe = "Sie sind dem Spiel erfolreich beigetreten.";
             jsg.put("Spieler2", Spieler2);
 
-            FileWriter fileg = new FileWriter("game.json");
+            FileWriter fileg = new FileWriter(name + "game.json");
             fileg.write(jsg.toJSONString());
             fileg.close();
 
@@ -273,20 +276,21 @@ public class UserInteraction {
     }
 
 
-    //bsp: http://localhost:8080/player1place?column=1
+    //bsp: http://localhost:8080/player1place?column=1&name=Max
     /**
      * Wirft eine Scheibe in die vom Nutzer angefragte Spalte, wenn er dran ist
      * @param column - Spalte, in die die Scheibe geworfen werden  soll
+     * @param name -Nötig, um auf die richtige Spieldatei zuzugreifen
      * @return einen String, der angibt, ob der Zug erfolgreich war oder was falsch gelaufen ist
      * @throws IOException
      * @throws ParseException
      */
     @GetMapping("/player1place")
-    public String player1place(@RequestParam(value = "column") int column) throws IOException, ParseException {
+    public String player1place(@RequestParam(value = "column") int column, @RequestParam(value = "name") String name) throws IOException, ParseException {
         String ausgabe = "";
 
         if(letzterZug.equals("Spieler2")){
-            Object o = new JSONParser().parse(new FileReader( "game.json"));
+            Object o = new JSONParser().parse(new FileReader( name +"game.json"));
             JSONObject js = (JSONObject) o;
 
             if(column > 7) return "So viele Spalten gibt es nicht.";
@@ -302,7 +306,7 @@ public class UserInteraction {
 
             if(letzterZug.equals("Spieler2") && ausgabe.equals("")) return "Diese Spalte ist bereits komplett gefüllt";
 
-            FileWriter file = new FileWriter("game.json");
+            FileWriter file = new FileWriter(name + "game.json");
             file.write(js.toJSONString());
             file.close();
 
@@ -315,23 +319,24 @@ public class UserInteraction {
     }
 
 
-    //bsp: http://localhost:8080/player2place?column=1
+    //bsp: http://localhost:8080/player2place?column=1&name=Max
     /**
      **
      * Wirft eine Scheibe in die vom Nutzer angefragte Spalte, wenn er dran ist
      * @param column - Spalte, in die die Scheibe geworfen werden  soll
+     * @param name -Nötig, um auf die richtige Spieldatei zuzugreifen
      * @return einen String, der angibt, ob der Zug erfolgreich war oder was falsch gelaufen ist
      * @throws IOException
      * @throws ParseException
      */
     @GetMapping("/player2place")
-    public String player2place(@RequestParam(value = "column") int column) throws IOException, ParseException {
+    public String player2place(@RequestParam(value = "column") int column, @RequestParam(value = "name") String name) throws IOException, ParseException {
         String ausgabe = "";
 
         if(column > 7) return "So viele Spalten gibt es nicht.";
 
         if(letzterZug.equals("Spieler1")){
-            Object o = new JSONParser().parse(new FileReader( "game.json"));
+            Object o = new JSONParser().parse(new FileReader( name + "game.json"));
             JSONObject js = (JSONObject) o;
 
             for(int i=6; i>=1; i--) {
@@ -345,7 +350,7 @@ public class UserInteraction {
 
             if(letzterZug.equals("Spieler1") && ausgabe.equals("")) return "Diese Spalte ist bereits komplett gefüllt";
 
-            FileWriter file = new FileWriter("game.json");
+            FileWriter file = new FileWriter(name + "game.json");
             file.write(js.toJSONString());
             file.close();
 
@@ -374,17 +379,18 @@ public class UserInteraction {
         return ausgabe;
     }
 
-    //bsp: http://localhost:8080/checkWinner
+    //bsp: http://localhost:8080/checkWinner?name=Max
     /**
      * Prüft ob 4 mal dieselbe Farbe entweder horizontal, vertikal oder diagonal im "Spielbrett" zu finden ist,
      * gibt diese aus, wenn es zutrifft, sonst einen leeren String
+     * @param name -Nötig, um auf die richtige Spieldatei zuzugreifen
      * @return einen String, der entweder leer ist, wenn noch kein Gewinner feststeht, oder je nachdem 'R' oder 'Y' enthält, wenn diese 4 mal dieselbe Farbe auftaucht
      */
     @GetMapping("/checkWinner")
-    public String checkWinner() throws IOException, ParseException {
+    public String checkWinner(@RequestParam(value = "name") String name) throws IOException, ParseException {
         String ausgabe = " ";
 
-        Object o = new JSONParser().parse(new FileReader( "game.json"));
+        Object o = new JSONParser().parse(new FileReader( name + "game.json"));
         JSONObject js = (JSONObject) o;
 
         //Horizontal prüfen
@@ -506,10 +512,10 @@ public class UserInteraction {
      * @throws ParseException
      */
     @GetMapping("/visualize")
-    public String visualize() throws IOException, ParseException {
+    public String visualize(@RequestParam(value = "name") String name) throws IOException, ParseException {
         String ausgabe = "";
 
-        Object o = new JSONParser().parse(new FileReader( "game.json"));
+        Object o = new JSONParser().parse(new FileReader( name + "game.json"));
         JSONObject js = (JSONObject) o;
 
         String Feld11 = (String) js.get("Feld11");

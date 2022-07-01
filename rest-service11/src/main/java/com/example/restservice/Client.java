@@ -21,8 +21,8 @@ public class Client {
          * 1 Attribut vom Typ String, zur späteren Überschreibung durch die Ausgaben des Servers nach Aufruf der URIs
          * Instanz der Klasse RestTemplate, um die Daten Ausgabe des Servers zu erhalten
          */
-        String name;
-        String password;
+        String name = "";
+        String password = "";
         Scanner s = new Scanner(System.in);
         boolean angemeldet = false;
         boolean registered = false;
@@ -118,9 +118,9 @@ public class Client {
 
             //temporär für die manuelle Ausgabe des Spielbretts gewesen
             else if(eingabe.equals("visualize")){
-                rt.getForObject("http://localhost:8080/createSingleplayerGame", String.class);
-                rt.getForObject("http://localhost:8080/player1place?column=1", String.class);
-                System.out.println(rt.getForObject("http://localhost:8080/visualize", String.class));
+                rt.getForObject("http://localhost:8080/createSingleplayerGame?name="+name+"", String.class);
+                rt.getForObject("http://localhost:8080/player1place?column=1?name="+name+"", String.class);
+                System.out.println(rt.getForObject("http://localhost:8080/visualizen?name="+name+"", String.class));
             }
 
 
@@ -139,54 +139,64 @@ public class Client {
 
                 //Gegen anderen Spieler
                 if(eingabe.equals("m")) {
-                    System.out.println(rt.getForObject("http://localhost:8080/createMultiplayerGame", String.class));
+                    System.out.println(rt.getForObject("http://localhost:8080/createMultiplayerGame?name="+name+"", String.class));
                     while(!rt.getForObject("http://localhost:8080/checkIfStartable", String.class).equals("Das Spiel kann gestartet werden")){ Thread.sleep(1000);}
 
-                    while(rt.getForObject("http://localhost:8080/checkWinner", String.class).equals(" ")) {
+                    ausgabe = " ";
+                    while(ausgabe.equals(" ")) {
                         Thread.sleep(1000);
+
                         //Nachdem Spieler 2 seinen Zug gemacht hat, macht Spieler 1 seinen
                         if (rt.getForObject("http://localhost:8080/checkLastMove", String.class).equals("Spieler 1 ist am Zug")) {
-                            System.out.println(rt.getForObject("http://localhost:8080/visualize", String.class));
-                            while (rt.getForObject("http://localhost:8080/checkLastMove", String.class).equals("Spieler 1 ist am Zug")) {
-                                System.out.println("\nWirf die Scheibe in die Spalte: (1-7)");
-                                int spalte = s.nextInt();
-                                System.out.println(rt.getForObject("http://localhost:8080/player1place?column=" + spalte + "", String.class));
+                            System.out.println(rt.getForObject("http://localhost:8080/visualize?name=" + name + "", String.class));
+
+                            ausgabe = rt.getForObject("http://localhost:8080/checkWinner?name=" + name + "", String.class);
+                            if (ausgabe.equals(" ")) {
+                                while (rt.getForObject("http://localhost:8080/checkLastMove", String.class).equals("Spieler 1 ist am Zug")) {
+                                    System.out.println("\nWirf die Scheibe in die Spalte: (1-7)");
+                                    int spalte = s.nextInt();
+                                    System.out.println(rt.getForObject("http://localhost:8080/player1place?column=" + spalte + "&name=" + name + "", String.class));
+                                }
+                                System.out.println(rt.getForObject("http://localhost:8080/visualize?name=" + name + "", String.class));
+                                ausgabe = rt.getForObject("http://localhost:8080/checkWinner?name=" + name + "", String.class);
                             }
-                            System.out.println(rt.getForObject("http://localhost:8080/visualize", String.class));
                         }
                     }
-                        if (rt.getForObject("http://localhost:8080/checkWinner", String.class).equals("R")) System.out.println("Du hast gewonnen!");
+                        if (rt.getForObject("http://localhost:8080/checkWinner?name="+name+"", String.class).equals("R")) System.out.println("Du hast gewonnen!");
                         else System.out.println("Du hast leider verloren");
                     }
 
 
                 //Gegen den Computer
                 else if(eingabe.equals("s")){
-                    System.out.println(rt.getForObject("http://localhost:8080/createSingleplayerGame", String.class));
+                    System.out.println(rt.getForObject("http://localhost:8080/createSingleplayerGame?name="+name+"", String.class));
 
-                    ausgabe = rt.getForObject("http://localhost:8080/checkWinner", String.class);
+                    ausgabe =" ";
                     while(ausgabe.equals(" ")) {
 
                         //Der User macht seinen Zug
-                        if(rt.getForObject("http://localhost:8080/checkLastMove", String.class).equals("Spieler 1 ist am Zug")) {
-                            while(rt.getForObject("http://localhost:8080/checkLastMove", String.class).equals("Spieler 1 ist am Zug")) {
+                        if (rt.getForObject("http://localhost:8080/checkWinner?name=" + name + "", String.class).equals(" ")) {
+                            while (rt.getForObject("http://localhost:8080/checkLastMove", String.class).equals("Spieler 1 ist am Zug")) {
                                 System.out.println("\nWirf die Scheibe in die Spalte: (1-7)");
                                 int spalte = s.nextInt();
-                                System.out.println(rt.getForObject("http://localhost:8080/player1place?column=" + spalte + "", String.class));
+                                System.out.println(rt.getForObject("http://localhost:8080/player1place?column=" + spalte + "&name=" + name + "", String.class));
                             }
-                            System.out.println(rt.getForObject("http://localhost:8080/visualize", String.class));
-
-                            //Der Computer macht so lange zufällige Züge, bis einer gültig ist, denn er kann versuchen auf eine bereits gefüllte Zeile werfen zu wollen
-                        } else while(rt.getForObject("http://localhost:8080/checkLastMove", String.class).equals("Spieler 2 ist am Zug")) {
-                            System.out.println("Der Computer hat folgenden Zug gemacht:");
-                            int zufaelligeSpalte = r.nextInt(6) + 1;
-                            rt.getForObject("http://localhost:8080/player2place?column="+zufaelligeSpalte+"", String.class);
-                            System.out.println(rt.getForObject("http://localhost:8080/visualize", String.class));
+                            System.out.println(rt.getForObject("http://localhost:8080/visualize?name=" + name + "", String.class));
                         }
-                        ausgabe = rt.getForObject("http://localhost:8080/checkWinner", String.class);
+
+                        //Der Computer macht so lange zufällige Züge, bis einer gültig ist, denn er kann versuchen auf eine bereits gefüllte Zeile werfen zu wollen
+                        if (rt.getForObject("http://localhost:8080/checkWinner?name=" + name + "", String.class).equals(" ")) {
+                            while (rt.getForObject("http://localhost:8080/checkLastMove", String.class).equals("Spieler 2 ist am Zug")) {
+                                System.out.println("Der Computer hat folgenden Zug gemacht:");
+                                int zufaelligeSpalte = r.nextInt(6) + 1;
+                                rt.getForObject("http://localhost:8080/player2place?column=" + zufaelligeSpalte + "&name=" + name + "", String.class);
+                            }
+                            System.out.println(rt.getForObject("http://localhost:8080/visualize?name=" + name + "", String.class));
+                        }
+                            ausgabe = rt.getForObject("http://localhost:8080/checkWinner?name=" + name + "", String.class);
                     }
 
-                    if(rt.getForObject("http://localhost:8080/checkWinner", String.class).equals("R")) System.out.println("Du hast gewonnen!");
+                    if(rt.getForObject("http://localhost:8080/checkWinner?name="+name+"", String.class).equals("R")) System.out.println("Du hast gewonnen!");
                     else System.out.println("Du hast leider verloren");
 
                 } else System.out.println("Keine gueltige Eingabe");
@@ -203,21 +213,28 @@ public class Client {
                 ausgabe = rt.getForObject("http://localhost:8080/join?name="+enemy+"", String.class);
                 if(ausgabe.equals("Sie sind dem Spiel erfolreich beigetreten.")){
 
-                    while (rt.getForObject("http://localhost:8080/checkWinner", String.class).equals(" ")) {
+                    ausgabe =" ";
+                    while(ausgabe.equals(" ")) {
                         Thread.sleep(1000);
+
                         //Nachdem Spieler 1 seinen Zug gemacht hat, macht Spieler 2 seinen
                         if (rt.getForObject("http://localhost:8080/checkLastMove", String.class).equals("Spieler 2 ist am Zug")) {
-                            System.out.println(rt.getForObject("http://localhost:8080/visualize", String.class));
-                            while (rt.getForObject("http://localhost:8080/checkLastMove", String.class).equals("Spieler 2 ist am Zug")) {
-                                System.out.println("\nWirf die Scheibe in die Spalte: (1-7)");
-                                int spalte = s.nextInt();
-                                System.out.println(rt.getForObject("http://localhost:8080/player2place?column=" + spalte + "", String.class));
+                            System.out.println(rt.getForObject("http://localhost:8080/visualize?name=" + enemy + "", String.class));
+
+                            ausgabe = rt.getForObject("http://localhost:8080/checkWinner?name=" + enemy + "", String.class);
+                            if (ausgabe.equals(" ")) {
+                                while (rt.getForObject("http://localhost:8080/checkLastMove", String.class).equals("Spieler 2 ist am Zug")) {
+                                    System.out.println("\nWirf die Scheibe in die Spalte: (1-7)");
+                                    int spalte = s.nextInt();
+                                    System.out.println(rt.getForObject("http://localhost:8080/player2place?column=" + spalte + "?name=" + enemy + "", String.class));
+                                }
+                                System.out.println(rt.getForObject("http://localhost:8080/visualize?name=" + enemy + "", String.class));
+                                ausgabe = rt.getForObject("http://localhost:8080/checkWinner?name=" + enemy + "", String.class);
                             }
-                            System.out.println(rt.getForObject("http://localhost:8080/visualize", String.class));
                         }
                     }
 
-                    if (rt.getForObject("http://localhost:8080/checkWinner", String.class).equals("Y")) System.out.println("Du hast gewonnen!");
+                    if (rt.getForObject("http://localhost:8080/checkWinner?name="+enemy+"", String.class).equals("Y")) System.out.println("Du hast gewonnen!");
                     else System.out.println("Du hast leider verloren");
 
 

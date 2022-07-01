@@ -20,7 +20,7 @@ public class GameCreation {
      * @throws IOException bei Problemen mit FileWriter
      */
 
-    public void newGame() throws IOException{
+    public void newGame(String name) throws IOException{
         Path path = Paths.get("");
         JSONObject newGame = new JSONObject();
 
@@ -77,7 +77,7 @@ public class GameCreation {
 
 
 
-        FileWriter file = new FileWriter(  "game.json");
+        FileWriter file = new FileWriter(  name + "game.json");
         file.write(newGame.toJSONString());
         file.close();
     }
