@@ -16,10 +16,6 @@ public class UserInteraction {
 
     int aktuellerNutzer = 0;
     String[] users = new String[10];
-    String Spieler1 = "";
-    String Spieler2 = "";
-    String letzterZug = "Spieler2";
-    boolean lobbyFull = false;
 
     GameCreation gc = new GameCreation();
     UserCreation uc = new UserCreation();
@@ -146,8 +142,7 @@ public class UserInteraction {
     @GetMapping("/createSingleplayerGame")
     public String createSingleplayerGame(@RequestParam(value = "name") String name) throws IOException, ParseException {
         String ausgabe = "";
-        letzterZug = "Spieler2";
-        Spieler1 = name;
+        String Spieler1 = name;
         gc.newGame(Spieler1);
 
 
@@ -161,12 +156,13 @@ public class UserInteraction {
         file.close();
 
 
-        //Das Attribut "Spieler1" in der JSON-Datei für den Zustand des Spiels wird auf den aufrufenden Nutzer gesetzt
-        //Und Das Attribut "Spieler2" auf "Computer"
+        //Das Attribut "Spieler1" und das Attribut "aktuellDran" in der JSON-Datei für den Zustand des Spiels wird auf den aufrufenden Nutzer gesetzt und
+        //das Attribut "Spieler2" auf "Computer"
         Object og = new JSONParser().parse(new FileReader(Spieler1 + "game.json"));
         JSONObject jsg = (JSONObject) og;
         jsg.put("Spieler1", Spieler1);
         jsg.put("Spieler2", "Computer");
+        js.put("aktuellDran", "Spieler2");
 
 
         FileWriter fileg = new FileWriter(Spieler1 + "game.json");
@@ -190,7 +186,7 @@ public class UserInteraction {
     @GetMapping("/createMultiplayerGame")
     public String createMultiplayerGame(@RequestParam(value = "name") String name) throws IOException, ParseException {
         String ausgabe = "";
-        Spieler1 = name;
+        String Spieler1 = name;
         gc.newGame(Spieler1);
 
 
@@ -204,10 +200,11 @@ public class UserInteraction {
         file.close();
 
 
-        //Das Attribut "Spieler1" in der JSON-Datei für den Zustand des Spiels wird auf den aufrufenden Nutzer gesetzt
+        //Das Attribut "Spieler1" und das Attribut "aktuellDran" in der JSON-Datei für den Zustand des Spiels wird auf den aufrufenden Nutzer gesetzt
         Object og = new JSONParser().parse(new FileReader( Spieler1 + "game.json"));
         JSONObject jsg = (JSONObject) og;
         jsg.put("Spieler1", Spieler1);
+        js.put("aktuellDran", "Spieler1");
 
 
         FileWriter fileg = new FileWriter(  Spieler1 + "game.json");
@@ -260,8 +257,7 @@ public class UserInteraction {
 
         //Wenn das Spiel existiert und kein 2. Spieler da ist, wird der aktuelle Nutzer zum 2. Spieler
         if(hasGame == true && player2.equals("")){
-            Spieler2 = users[aktuellerNutzer];
-            lobbyFull = true;
+            String Spieler2 = users[aktuellerNutzer];
             ausgabe = "Sie sind dem Spiel erfolreich beigetreten.";
             jsg.put("Spieler2", Spieler2);
 
@@ -289,9 +285,11 @@ public class UserInteraction {
     public String player1place(@RequestParam(value = "column") int column, @RequestParam(value = "name") String name) throws IOException, ParseException {
         String ausgabe = "";
 
-        if(letzterZug.equals("Spieler2")){
-            Object o = new JSONParser().parse(new FileReader( name +"game.json"));
-            JSONObject js = (JSONObject) o;
+        Object o = new JSONParser().parse(new FileReader(name + "game.json"));
+        JSONObject js = (JSONObject) o;
+        String aktuellDran = (String) js.get("aktuellDran");
+
+        if(aktuellDran.equals("Spieler1")){
 
             if(column > 7) return "So viele Spalten gibt es nicht.";
 
@@ -299,18 +297,17 @@ public class UserInteraction {
                 String zelle = (String) js.get("Feld" + i + column);
                 if (zelle.equals(" ")) {
                     js.put("Feld" + i + column, "R");
+                    js.put("aktuellDran", "Spieler2");
                     ausgabe = "Erfolgreich abgelegt";
                     break;
                 }
             }
 
-            if(letzterZug.equals("Spieler2") && ausgabe.equals("")) return "Diese Spalte ist bereits komplett gefüllt";
+            if(aktuellDran.equals("Spieler1") && ausgabe.equals("")) return "Diese Spalte ist bereits komplett gefüllt";
 
             FileWriter file = new FileWriter(name + "game.json");
             file.write(js.toJSONString());
             file.close();
-
-            letzterZug = "Spieler1";
 
 
         } else ausgabe = "Sie sind aktuell nicht dran";
@@ -333,28 +330,29 @@ public class UserInteraction {
     public String player2place(@RequestParam(value = "column") int column, @RequestParam(value = "name") String name) throws IOException, ParseException {
         String ausgabe = "";
 
+        Object o = new JSONParser().parse(new FileReader(name + "game.json"));
+        JSONObject js = (JSONObject) o;
+        String aktuellDran = (String) js.get("aktuellDran");
+
         if(column > 7) return "So viele Spalten gibt es nicht.";
 
-        if(letzterZug.equals("Spieler1")){
-            Object o = new JSONParser().parse(new FileReader( name + "game.json"));
-            JSONObject js = (JSONObject) o;
+        if(aktuellDran.equals("Spieler2")){
 
             for(int i=6; i>=1; i--) {
                 String zelle = (String) js.get("Feld" + i + column);
                 if (zelle.equals(" ")) {
                     js.put("Feld" + i + column, "Y");
+                    js.put("aktuellDran", "Spieler1");
                     ausgabe = "Erfolgreich abgelegt";
                     break;
                 }
             }
 
-            if(letzterZug.equals("Spieler1") && ausgabe.equals("")) return "Diese Spalte ist bereits komplett gefüllt";
+            if(aktuellDran.equals("Spieler2") && ausgabe.equals("")) return "Diese Spalte ist bereits komplett gefüllt";
 
             FileWriter file = new FileWriter(name + "game.json");
             file.write(js.toJSONString());
             file.close();
-
-            letzterZug = "Spieler2";
 
 
         } else ausgabe = "Sie sind aktuell nicht dran";
@@ -363,16 +361,23 @@ public class UserInteraction {
     }
 
 
-    //bsp: http://localhost:8080/checkLastMove
+    //bsp: http://localhost:8080/checkLastMove?name=Max
     /**
      * Prüft welcher Spieler zuletzt seinen Zug gemacht hat und gibt aus welcher Spieler nun dran ist
+     * @param name -Nötig, um auf die richtige Spieldatei zuzugreifen
      * @return einen String, der angibt, welcher Spieler gerade am Zug ist
+     * @throws IOException
+     * @throws ParseException
      */
     @GetMapping("/checkLastMove")
-    public String checkLastMove() {
+    public String checkLastMove(@RequestParam(value = "name") String name) throws IOException, ParseException {
         String ausgabe = "";
 
-        if(letzterZug.equals("Spieler1")) ausgabe = "Spieler 2 ist am Zug";
+        Object o = new JSONParser().parse(new FileReader(name + "game.json"));
+        JSONObject js = (JSONObject) o;
+        String aktuellDran = (String) js.get("aktuellDran");
+
+        if(aktuellDran.equals("Spieler2")) ausgabe = "Spieler 2 ist am Zug";
 
         else ausgabe = "Spieler 1 ist am Zug";
 
@@ -385,6 +390,8 @@ public class UserInteraction {
      * gibt diese aus, wenn es zutrifft, sonst einen leeren String
      * @param name -Nötig, um auf die richtige Spieldatei zuzugreifen
      * @return einen String, der entweder leer ist, wenn noch kein Gewinner feststeht, oder je nachdem 'R' oder 'Y' enthält, wenn diese 4 mal dieselbe Farbe auftaucht
+     * @throws IOException
+     * @throws ParseException
      */
     @GetMapping("/checkWinner")
     public String checkWinner(@RequestParam(value = "name") String name) throws IOException, ParseException {
@@ -504,9 +511,10 @@ public class UserInteraction {
     }
 
 
-    //bsp: http://localhost:8080/visualize
+    //bsp: http://localhost:8080/visualize?name=Max
     /**
      * Gibt das aktuelle "Spielbrett" formatiert in einem String aus
+     * @param name -Nötig, um auf die richtige Spieldatei zuzugreifen
      * @return einen String, der den Zustand des aktuellen "Spielbretts" enthält
      * @throws IOException
      * @throws ParseException
@@ -579,16 +587,23 @@ public class UserInteraction {
     }
 
 
-    //bsp: http://localhost:8080/checkIfStartable
+    //bsp: http://localhost:8080/checkIfStartable?name=Max
     /**
      * Prüft, ob ein 2. Spieler dem selbst kreierten Spiel beigetreten ist
+     * @param name -Nötig, um auf die richtige Spieldatei zuzugreifen
      * @return einen String, der angibt, ob ein 2. Spieler beigetreten ist
+     * @throws IOException
+     * @throws ParseException
      */
     @GetMapping("/checkIfStartable")
-    public String checkIfStartable() {
+    public String checkIfStartable(@RequestParam(value = "name") String name) throws IOException, ParseException {
         String ausgabe = "";
 
-        if(lobbyFull == true) ausgabe = "Das Spiel kann gestartet werden";
+        Object o = new JSONParser().parse(new FileReader(name + "game.json"));
+        JSONObject js = (JSONObject) o;
+        String Spieler2 = (String) js.get("Spieler2");
+
+        if(!Spieler2.equals("")) ausgabe = "Das Spiel kann gestartet werden";
 
         else ausgabe = "Es ist noch kein 2. Spieler beigetreten";
 

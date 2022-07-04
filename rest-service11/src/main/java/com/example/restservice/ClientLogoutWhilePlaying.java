@@ -90,8 +90,8 @@ public class ClientLogoutWhilePlaying {
                         while (ui.checkWinner(name).equals(" ")) {
 
                             //Der User macht seinen Zug
-                            if (ui.checkLastMove().equals("Spieler 1 ist am Zug")) {
-                                while (ui.checkLastMove().equals("Spieler 1 ist am Zug")) {
+                            if (ui.checkLastMove(name).equals("Spieler 1 ist am Zug")) {
+                                while (ui.checkLastMove(name).equals("Spieler 1 ist am Zug")) {
                                     System.out.println("\nWirf die Scheibe in die Spalte: (1-7)");
 
                                     //Mitten im Spiel ausloggen
@@ -114,7 +114,7 @@ public class ClientLogoutWhilePlaying {
                                 //Der Computer macht so lange zufällige Züge, bis einer gültig ist, denn er kann versuchen auf eine bereits gefüllte Zeile werfen zu wollen
                             } else {
                                 System.out.println("Der Computer hat folgenden Zug gemacht:");
-                                while (ui.checkLastMove().equals("Spieler 2 ist am Zug")) {
+                                while (ui.checkLastMove(name).equals("Spieler 2 ist am Zug")) {
                                     ui.player2place(r.nextInt(6) + 1, name);
                                 }
                                 System.out.println(ui.visualize(name));
@@ -138,9 +138,9 @@ public class ClientLogoutWhilePlaying {
 
                         while (ui.checkWinner(name).equals(" ")) {
                             //Nachdem Spieler 2 seinen Zug gemacht hat, macht Spieler 1 seinen
-                            if (ui.checkLastMove().equals("Spieler 1 ist am Zug")) {
+                            if (ui.checkLastMove(name).equals("Spieler 1 ist am Zug")) {
                                 System.out.println(ui.visualize(name));
-                                while (ui.checkLastMove().equals("Spieler 1 ist am Zug")) {
+                                while (ui.checkLastMove(name).equals("Spieler 1 ist am Zug")) {
                                     System.out.println("\nWirf die Scheibe in die Spalte: (1-7)");
 
                                     //Mitten im Spiel ausloggen
@@ -185,9 +185,9 @@ public class ClientLogoutWhilePlaying {
                         while (ui.checkWinner(enemy).equals(" ")) {
 
                             //Nachdem Spieler 1 seinen Zug gemacht hat, macht Spieler 2 seinen
-                            if (ui.checkLastMove().equals("Spieler 2 ist am Zug")) {
+                            if (ui.checkLastMove(enemy).equals("Spieler 2 ist am Zug")) {
                                 System.out.println(ui.visualize(enemy));
-                                while (ui.checkLastMove().equals("Spieler 2 ist am Zug")) {
+                                while (ui.checkLastMove(enemy).equals("Spieler 2 ist am Zug")) {
                                     System.out.println("\nWirf die Scheibe in die Spalte: (1-7)");
 
                                     //Mitten im Spiel ausloggen
@@ -263,7 +263,7 @@ public class ClientLogoutWhilePlaying {
                         if (eingabe.equals("m")) {
                             gameFormat = "multiplayer";
                             System.out.println(ui.createMultiplayerGame(name));
-                            while (!ui.checkIfStartable().equals("Das Spiel kann gestartet werden")) {
+                            while (!ui.checkIfStartable(name).equals("Das Spiel kann gestartet werden")) {
                                 eingabe = s.nextLine();
                                 if (eingabe.equals("logout")) {
                                     angemeldet = false;
@@ -279,9 +279,9 @@ public class ClientLogoutWhilePlaying {
 
                             while (ui.checkWinner(name).equals(" ")) {
                                 //Nachdem Spieler 2 seinen Zug gemacht hat, macht Spieler 1 seinen
-                                if (ui.checkLastMove().equals("Spieler 1 ist am Zug")) {
+                                if (ui.checkLastMove(name).equals("Spieler 1 ist am Zug")) {
                                     System.out.println(ui.visualize(name));
-                                    while (ui.checkLastMove().equals("Spieler 1 ist am Zug")) {
+                                    while (ui.checkLastMove(name).equals("Spieler 1 ist am Zug")) {
                                         System.out.println("\nWirf die Scheibe in die Spalte: (1-7)");
 
                                         //Mitten im Spiel ausloggen
@@ -322,8 +322,8 @@ public class ClientLogoutWhilePlaying {
                             while (ui.checkWinner(name).equals(" ")) {
 
                                 //Der User macht seinen Zug
-                                if (ui.checkLastMove().equals("Spieler 1 ist am Zug")) {
-                                    while (ui.checkLastMove().equals("Spieler 1 ist am Zug")) {
+                                if (ui.checkLastMove(name).equals("Spieler 1 ist am Zug")) {
+                                    while (ui.checkLastMove(name).equals("Spieler 1 ist am Zug")) {
                                         System.out.println("\nWirf die Scheibe in die Spalte: (1-7)");
 
                                         //Mitten im Spiel ausloggen
@@ -346,7 +346,7 @@ public class ClientLogoutWhilePlaying {
                                     //Der Computer macht so lange zufällige Züge, bis einer gültig ist, denn er kann versuchen auf eine bereits gefüllte Zeile werfen zu wollen
                                 } else {
                                     System.out.println("Der Computer hat folgenden Zug gemacht:");
-                                    while (ui.checkLastMove().equals("Spieler 2 ist am Zug")) {
+                                    while (ui.checkLastMove(name).equals("Spieler 2 ist am Zug")) {
                                         ui.player2place(r.nextInt(6) + 1, name);
                                     }
                                     System.out.println(ui.visualize(name));
@@ -377,7 +377,7 @@ public class ClientLogoutWhilePlaying {
                             spieler2 = name;
                             System.out.println(ausgabe);
 
-                            while(!ui.checkLastMove().equals("Spieler 2 ist am Zug")) {
+                            while(!ui.checkLastMove(enemy).equals("Spieler 2 ist am Zug")) {
                                 eingabe = s.nextLine();
                                 if (eingabe.equals("logout")) {
                                     angemeldet = false;
@@ -389,9 +389,9 @@ public class ClientLogoutWhilePlaying {
                             while (ui.checkWinner(enemy).equals(" ")) {
 
                                 //Nachdem Spieler 1 seinen Zug gemacht hat, macht Spieler 2 seinen
-                                if (ui.checkLastMove().equals("Spieler 2 ist am Zug")) {
+                                if (ui.checkLastMove(enemy).equals("Spieler 2 ist am Zug")) {
                                     System.out.println(ui.visualize(enemy));
-                                    while (ui.checkLastMove().equals("Spieler 2 ist am Zug")) {
+                                    while (ui.checkLastMove(enemy).equals("Spieler 2 ist am Zug")) {
                                         System.out.println("\nWirf die Scheibe in die Spalte: (1-7)");
 
                                         //Mitten im Spiel ausloggen

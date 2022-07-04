@@ -13,7 +13,7 @@ public class GameCreation {
     public GameCreation(){}
 
     /**
-     * Erstellt eine .json Datei mit den Parametern Spieler1 und Spieler2
+     * Erstellt eine .json Datei mit den Parametern Spieler1, Spieler2 und aktuellDran
      * für die Teilnehmer des Spiels und einzelne Parameter für die Spielfelder
      * mit Feld[Zeile][Spalte].
      *
@@ -26,6 +26,7 @@ public class GameCreation {
 
         newGame.put("Spieler1", "");
         newGame.put("Spieler2", "");
+        newGame.put("aktuellDran", "Spieler1");
 
         newGame.put("Feld11", " ");
         newGame.put("Feld12", " ");
