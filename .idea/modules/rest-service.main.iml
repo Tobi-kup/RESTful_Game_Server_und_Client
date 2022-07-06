@@ -16,6 +16,7 @@
     <content url="file://$MODULE_DIR$/../../rest-service11/src/main">
       <sourceFolder url="file://$MODULE_DIR$/../../rest-service11/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../rest-service11/src/main/resources" type="java-resource" />
+      <excludeFolder url="file://$MODULE_DIR$/../../rest-service11/src/main/java/unused" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

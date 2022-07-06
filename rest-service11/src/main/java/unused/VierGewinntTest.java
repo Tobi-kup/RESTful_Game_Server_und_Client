@@ -1,4 +1,4 @@
-package com.example.restservice;
+package unused;
 import java.util.Scanner;
 
 
