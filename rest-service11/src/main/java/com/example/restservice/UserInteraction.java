@@ -131,7 +131,7 @@ public class UserInteraction {
     }
 
 
-    //bsp: http://localhost:8080/createSingleplayerGame
+    //bsp: http://localhost:8080/createSingleplayerGame?name=Max
     /**
      * Erstellt ein Spiel zwischen dem Nutzer und dem Computer
      * @return einen String, der angibt, dass das Spiel gestartet wurde
@@ -175,11 +175,11 @@ public class UserInteraction {
     }
 
 
-    //bsp: http://localhost:8080/createMultiplayerGame
+    //bsp: http://localhost:8080/createMultiplayerGame?name=Max
     /**
      * Erstellt ein Spiel mit dem Nutzer als Spieler 1 und setzt das Attribut "hasGame" innerhalb des Nutzkontos auf true.
      * @return einen String, der angibt, dass ein Spiel erstellt wurde und nun auf einen 2. Spieler gewartet wird
-     * @param name -Nötig, um auf die richtige Spieldatei zuzugreifen
+     * @param name - Nötig, um auf die richtige Spieldatei zuzugreifen
      * @throws IOException
      * @throws ParseException
      */
@@ -221,7 +221,7 @@ public class UserInteraction {
     /**
      * Es wird dem Spiel vom angegebenem Kontos beigetreten, dafür wird das Attribut Spieler 2, auf den aufrufenden Benutzer gelegt
      * und das Attribut "hasGame" innerhalb des aufrufenden Nutzkontos auf true gesetzt.
-     * @param name -Nötig, um auf die richtige Spieldatei zuzugreifen
+     * @param name - Nötig, um auf die richtige Spieldatei zuzugreifen
      * @return einen String, der angibt, ob der Beitritt erfolgreich war
      * @throws IOException
      * @throws ParseException
@@ -276,7 +276,7 @@ public class UserInteraction {
     /**
      * Wirft eine Scheibe in die vom Nutzer angefragte Spalte, wenn er dran ist
      * @param column - Spalte, in die die Scheibe geworfen werden  soll
-     * @param name -Nötig, um auf die richtige Spieldatei zuzugreifen
+     * @param name - Nötig, um auf die richtige Spieldatei zuzugreifen
      * @return einen String, der angibt, ob der Zug erfolgreich war oder was falsch gelaufen ist
      * @throws IOException
      * @throws ParseException
@@ -321,7 +321,7 @@ public class UserInteraction {
      **
      * Wirft eine Scheibe in die vom Nutzer angefragte Spalte, wenn er dran ist
      * @param column - Spalte, in die die Scheibe geworfen werden  soll
-     * @param name -Nötig, um auf die richtige Spieldatei zuzugreifen
+     * @param name - Nötig, um auf die richtige Spieldatei zuzugreifen
      * @return einen String, der angibt, ob der Zug erfolgreich war oder was falsch gelaufen ist
      * @throws IOException
      * @throws ParseException
@@ -364,7 +364,7 @@ public class UserInteraction {
     //bsp: http://localhost:8080/checkLastMove?name=Max
     /**
      * Prüft welcher Spieler zuletzt seinen Zug gemacht hat und gibt aus welcher Spieler nun dran ist
-     * @param name -Nötig, um auf die richtige Spieldatei zuzugreifen
+     * @param name - Nötig, um auf die richtige Spieldatei zuzugreifen
      * @return einen String, der angibt, welcher Spieler gerade am Zug ist
      * @throws IOException
      * @throws ParseException
@@ -388,7 +388,7 @@ public class UserInteraction {
     /**
      * Prüft ob 4 mal dieselbe Farbe entweder horizontal, vertikal oder diagonal im "Spielbrett" zu finden ist,
      * gibt diese aus, wenn es zutrifft, sonst einen leeren String
-     * @param name -Nötig, um auf die richtige Spieldatei zuzugreifen
+     * @param name - Nötig, um auf die richtige Spieldatei zuzugreifen
      * @return einen String, der entweder leer ist, wenn noch kein Gewinner feststeht, oder je nachdem 'R' oder 'Y' enthält, wenn diese 4 mal dieselbe Farbe auftaucht
      * @throws IOException
      * @throws ParseException
@@ -514,7 +514,7 @@ public class UserInteraction {
     //bsp: http://localhost:8080/visualize?name=Max
     /**
      * Gibt das aktuelle "Spielbrett" formatiert in einem String aus
-     * @param name -Nötig, um auf die richtige Spieldatei zuzugreifen
+     * @param name - Nötig, um auf die richtige Spieldatei zuzugreifen
      * @return einen String, der den Zustand des aktuellen "Spielbretts" enthält
      * @throws IOException
      * @throws ParseException
@@ -590,7 +590,7 @@ public class UserInteraction {
     //bsp: http://localhost:8080/checkIfStartable?name=Max
     /**
      * Prüft, ob ein 2. Spieler dem selbst kreierten Spiel beigetreten ist
-     * @param name -Nötig, um auf die richtige Spieldatei zuzugreifen
+     * @param name - Nötig, um auf die richtige Spieldatei zuzugreifen
      * @return einen String, der angibt, ob ein 2. Spieler beigetreten ist
      * @throws IOException
      * @throws ParseException

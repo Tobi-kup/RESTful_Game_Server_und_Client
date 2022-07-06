@@ -162,9 +162,9 @@ public class Client {
                             }
                         }
                     }
-                        if (rt.getForObject("http://localhost:8080/checkWinner?name="+name+"", String.class).equals("R")) System.out.println("Du hast gewonnen!");
-                        else System.out.println("Du hast leider verloren");
-                    }
+                    if (rt.getForObject("http://localhost:8080/checkWinner?name="+name+"", String.class).equals("R")) System.out.println("Du hast gewonnen!");
+                    else System.out.println("Du hast leider verloren");
+                }
 
 
                 //Gegen den Computer
@@ -193,7 +193,7 @@ public class Client {
                             }
                             System.out.println(rt.getForObject("http://localhost:8080/visualize?name=" + name + "", String.class));
                         }
-                            ausgabe = rt.getForObject("http://localhost:8080/checkWinner?name=" + name + "", String.class);
+                        ausgabe = rt.getForObject("http://localhost:8080/checkWinner?name=" + name + "", String.class);
                     }
 
                     if(rt.getForObject("http://localhost:8080/checkWinner?name="+name+"", String.class).equals("R")) System.out.println("Du hast gewonnen!");
@@ -255,12 +255,12 @@ public class Client {
 
 
             //Ausloggen
-                /**
-                 * beendet die aktuelle Schleife und somit den Client, wenn der Benutzer "logout" eingibt
-                 */
+            /**
+             * beendet die aktuelle Schleife und somit den Client, wenn der Benutzer "logout" eingibt
+             */
             else if (eingabe.equals("logout")) {
-                    angemeldet = false;
-                }
+                angemeldet = false;
+            }
 
 
             else{
