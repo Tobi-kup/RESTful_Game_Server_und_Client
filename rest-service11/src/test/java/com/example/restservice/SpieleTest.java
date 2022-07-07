@@ -281,6 +281,4 @@ public class SpieleTest {
         if(eingabe.equals("Konto erfolgreich geloescht")) System.out.println("True");
         else System.out.println("False");
     }
-
-
 }

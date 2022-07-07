@@ -421,6 +421,11 @@ public class UserInteraction {
         Object o = new JSONParser().parse(new FileReader(new File(String.valueOf(endpath),name + "-game.json")));
         JSONObject js = (JSONObject) o;
 
+
+        Object og = new JSONParser().parse(new FileReader(new File(String.valueOf(endpath),name + ".json")));
+        JSONObject jsg = (JSONObject) og;
+
+
         //Horizontal prüfen
         //Zeilen durchlaufen
         for (int i=1; i<=6; i++) {
@@ -442,6 +447,14 @@ public class UserInteraction {
                         && (zelleJPlus2.equals(zelleJPlus3))) {
 
                     ausgabe = zelleJ;
+
+                    if(!ausgabe.equals(" ")){
+                        jsg.put("hasGame", false);
+                        FileWriter file = new FileWriter(new File(String.valueOf(endpath),name + ".json"));
+                        file.write(jsg.toJSONString());
+                        file.close();
+                    }
+
                     return ausgabe;
                 }
             }
@@ -469,6 +482,14 @@ public class UserInteraction {
                         && (zelleIPlus2.equals(zelleIPlus3))) {
 
                     ausgabe = zelleI;
+
+                    if(!ausgabe.equals(" ")){
+                        jsg.put("hasGame", false);
+                        FileWriter file = new FileWriter(new File(String.valueOf(endpath),name + ".json"));
+                        file.write(jsg.toJSONString());
+                        file.close();
+                    }
+
                     return ausgabe;
                 }
             }
@@ -497,6 +518,14 @@ public class UserInteraction {
                         && (zelleIPlus2JPlus2.equals(zelleIPlus3JPlus3))) {
 
                     ausgabe = zelleIJ;
+
+                    if(!ausgabe.equals(" ")){
+                        jsg.put("hasGame", false);
+                        FileWriter file = new FileWriter(new File(String.valueOf(endpath),name + ".json"));
+                        file.write(jsg.toJSONString());
+                        file.close();
+                    }
+
                     return ausgabe;
                 }
             }
@@ -524,6 +553,14 @@ public class UserInteraction {
                         && (zelleIPlus2JMinus2.equals(zelleIPlus3JMinus3))) {
 
                     ausgabe = zelleIJ;
+
+                    if(!ausgabe.equals(" ")){
+                        jsg.put("hasGame", false);
+                        FileWriter file = new FileWriter(new File(String.valueOf(endpath),name + ".json"));
+                        file.write(jsg.toJSONString());
+                        file.close();
+                    }
+
                     return ausgabe;
                 }
             }
