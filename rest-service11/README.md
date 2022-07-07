@@ -1,19 +1,20 @@
-Projekt 2: Entwurf eines Handelsplatzes in Java als RESTful Webservice
+Projekt 3: Entwurf eines Multiplayer Spiels in Java mit RESTful Webservice 
 
 Projektziel:
-Das Ziel des Projektes ist es einen Handelsplatzes in Java als RESTful Webservice mit zugehörigem Client zu erstellen.
-Dabei soll es eine Hauptwährung und mindestens zehn rare Handelsgüter geben, mit denen gehandelt werden kann.
-Die Handelsgüter sollen einen Handelswert haben, der regelmäßig durch die Handelsplattform aktualisiert wird.
-Jeder Nutzer des Handelsplatz soll über ein Konto und ein Gütervorrat verfügen.
-Auf das Konto soll die Hauptwährung ein- und ausgezahlt werden können.
-Die Nutzer sollen die eigenen vorrätigen Güter anbieten können und angebotene Güter zum Angebotspreis kaufen können.
-Bei dem Webservice soll jeder die aktuellen Handelswerte abrufen können.
+Das Ziel des Projektes ist es einen beliebigen mehrspieler Spiel in Java als RESTful Webservice mit zugehörigem Client zu erstellen.
+Dabei soll es möglich sein, mehrere Spiel-Instanzen gleichzeitig auf den Server zu durchlaufen.
+Die Nutzer sollen die Möglichkeit haben, ein Spiel zu erstellen oder jemand beizutreten. 
+Die Möglichkeit gegen einen Computer zu spielen wird auch angeboten.
+Jeder Nutzer des Programms soll über ein Konto verfügen.
+Die Nutzer dürfen während der Runde sich ausloggen, dannach treten sie die letzte Runde wieder bei wenn sie sich erneut anmelden. 
 
 
 Projektumfang:
 - RESTful Server implementieren
 - Klasse zur Erstellung eines Kontos implementieren
-- RandomWalk zur regelmäßigen Aktualisierung der Preise implementieren
+- Klasse zur Erstellung einen Spiel-Instanzen implementieren
+- Funktionen, die ausgeführt werden in client implementieren
+- Implementation des Ausloggens während einer Runde im Client umsetzen
 - RESTful Client implementieren
 - Unittests schreiben
 
@@ -45,14 +46,18 @@ URI: "http://localhost:8080/signup?name=<name>&password=<password>"
 Benötigt als Eingabe einen Namen und ein Passwort. Gewährt dem Benutzer bei Erfolg Zugang zum Server.
 URI: "http://localhost:8080/login?name=<name>&password=<password>"
 
-- @GetMapping("/info"): 
-Gibt einen String aller Kontoinformationen des angemeldeten Benutzkontos aus.
-URI: "http://localhost:8080/info"
+- @GetMapping("/createSingleplayerGame"): 
+Erstellt ein Singleplayer Game gegen den Computer 
+URI: "http://localhost:8080/createSingleplayerGame?name=<name>"
 
-- @GetMapping("/buy"):
-@RequestParam(value = "item") String item, @RequestParam(value = "amount") int amount
-Benötigt als Eingabe ein Gut und eine Menge. Erhöht je nachdem die Menge des Gutes innerhalb des Benutzerkontos und verringert den Kontostand.
-URI: "http://localhost:8080/buy?item=<item>&amount=<amount>"
+- @GetMapping("/createMultiplayerGame"): 
+Erstellt ein Multiplayer Game, dass andere Spieler über den Client beitreten können
+URI: "http://localhost:8080/createMultiplayerGame?name=<name>"
+
+- @GetMapping("/join"):
+@RequestParam(value = "name") String name
+Spieler treten ein existierenden Spiel beim Aufruf, durch konsole Eingabe wird die Name des Spiels bestimmt
+URI: "http://localhost:8080/join?name=<name>"
 
 - @GetMapping("/sell"): 
 @RequestParam(value = "item") String item, @RequestParam(value = "amount") int amount
