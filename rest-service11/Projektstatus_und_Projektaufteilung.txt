@@ -3,9 +3,9 @@ Projektaufteilung:
 Das Projekt haben wir in folgende Teilaufgaben aufgeteilt und die angebene Person hat sich größtenteils darum gekümmmert:
 
 
-- Randomwalk und Client sowie UML-Diagramm : 				Fengyi
-- Server / Methoden für angemeldete Nutzer Unittests und ReadME: 	Tobias
-- JSON Einbindung / Erstellung von Nutzer und Projektaufteilung: 	Maximilian
+- Client sowie UML-Diagramm, Funktionalität des Spiels : 			                               	Fengyi
+- Server / Methoden für angemeldete Nutzer, Funktionalität des Spiels Unittests ReadME:            	Tobias
+- JSON Einbindung / Erstellung von Nutzer und Spielinstanzen und Projektaufteilung:             	Maximilian
 
 
 Natürlich haben wir uns regelmäßig im Discord getroffen, oft die Funktion "Code With Me" von IntelliJ IDEA benutzt und bei Schwierigkeiten gemeinsam überlegt, sodass die Aufteilung nur grob zutrifft.
@@ -15,9 +15,11 @@ Natürlich haben wir uns regelmäßig im Discord getroffen, oft die Funktion "Co
 Projektstatus:
 
 - UML-Diagramm und Ideen zur Projektumsetzung : erledigt
-- Erstellung der Randomwalk Klasse : erledigt
+- Umsetzen der Funktionalität von "Vier gewinnt": erledigt
 - Aufbau des Servers und Methoden für angemeldete Nutzer : erledigt
 - Klasse zur Erstellung neuer Nutzer inklusive Erstellung einer Nutzer.json : erledigt
+- Klasse zur Erstellung von Spielinstanzen inklusive Erstellung einer Nutzer-game.json : erledigt
 - Aufbau des Clients : erledigt
 - Ausführliches Testen des Projekts mithilfe von Unittests : erledigt
+- Continous Integration und Gitlab Runner implementiert : erledigt
 - Schreiben der ReadME und Projektstatus und Projektaufteilung : erledigt
