@@ -266,7 +266,7 @@ public class Client {
                                         } else {
 
                                             int spalte = Integer.parseInt(eingabe);
-                                            System.out.println(rt.getForObject("http://localhost:8080/player2place?column=" + spalte + "?name=" + enemy + "", String.class));
+                                            System.out.println(rt.getForObject("http://localhost:8080/player2place?column=" + spalte + "&name=" + enemy + "", String.class));
                                         }
                                     }
                                     if (eingabe.equals("logout")) {
@@ -336,12 +336,15 @@ public class Client {
                         if (eingabe.equals("m")) {
                             gameFormat = "multiplayer";
                             System.out.println(rt.getForObject("http://localhost:8080/createMultiplayerGame?name=" + name + "", String.class));
+                            System.out.println("Tippen Sie etwas, damit die Runde starten kann oder geben Sie 'logout' ein um sich auszuloggen:");
+
+                            eingabe = s.nextLine();
+                            if (eingabe.equals("logout")) {
+                                angemeldet = false;
+                                break;
+                            }
+
                             while (!rt.getForObject("http://localhost:8080/checkIfStartable?name=" + name + "", String.class).equals("Das Spiel kann gestartet werden")) {
-                                eingabe = s.nextLine();
-                                if (eingabe.equals("logout")) {
-                                    angemeldet = false;
-                                    break;
-                                }
                                 Thread.sleep(1000);
                             }
                             if (eingabe.equals("logout")) {
@@ -504,7 +507,7 @@ public class Client {
                                             } else {
 
                                                 int spalte = Integer.parseInt(eingabe);
-                                                System.out.println(rt.getForObject("http://localhost:8080/player2place?column=" + spalte + "?name=" + enemy + "", String.class));
+                                                System.out.println(rt.getForObject("http://localhost:8080/player2place?column=" + spalte + "&name=" + enemy + "", String.class));
                                             }
                                         }
                                         if (eingabe.equals("logout")) {
