@@ -297,7 +297,7 @@ public class UserInteraction {
     public String player1place(@RequestParam(value = "column") int column, @RequestParam(value = "name") String name) throws IOException, ParseException {
         String ausgabe = "";
 
-        Object o = new JSONParser().parse(new FileReader(name + "game.json"));
+        Object o = new JSONParser().parse(new FileReader(new File(String.valueOf(endpath), name + "-game.json")));
         JSONObject js = (JSONObject) o;
         String aktuellDran = (String) js.get("aktuellDran");
 
@@ -535,7 +535,7 @@ public class UserInteraction {
     public String visualize(@RequestParam(value = "name") String name) throws IOException, ParseException {
         String ausgabe = "";
 
-        Object o = new JSONParser().parse(new FileReader( name + "game.json"));
+        Object o = new JSONParser().parse(new FileReader(new File(String.valueOf(endpath), name + "-game.json")));
         JSONObject js = (JSONObject) o;
 
         String Feld11 = (String) js.get("Feld11");
@@ -611,7 +611,7 @@ public class UserInteraction {
     public String checkIfStartable(@RequestParam(value = "name") String name) throws IOException, ParseException {
         String ausgabe = "";
 
-        Object o = new JSONParser().parse(new FileReader(name + "game.json"));
+        Object o = new JSONParser().parse(new FileReader(new File(String.valueOf(endpath),name + "-game.json")));
         JSONObject js = (JSONObject) o;
         String Spieler2 = (String) js.get("Spieler2");
 
@@ -648,7 +648,7 @@ public class UserInteraction {
         js.put("password", "");
         js.put("hasGame", "");
 
-        FileWriter file = new FileWriter(  name + ".json");
+        FileWriter file = new FileWriter(new File(String.valueOf(endpath), name + ".json"));
         file.write(js.toJSONString());
         file.close();
 
