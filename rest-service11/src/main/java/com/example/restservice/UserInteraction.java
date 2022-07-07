@@ -4,6 +4,8 @@ import org.json.simple.parser.ParseException;
 import org.springframework.web.bind.annotation.*;
 import org.json.simple.*;
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 
 /** UserInteraction ist die Klasse zur Erstellung der URIs, sie ist der Server des Projektes.
@@ -19,6 +21,9 @@ public class UserInteraction {
 
     GameCreation gc = new GameCreation();
     UserCreation uc = new UserCreation();
+
+    Path path = Paths.get("").toAbsolutePath();
+    Path endpath = Path.of(path + "\\rest-service11\\json-Dateien");
 
     public UserInteraction(){}
 
@@ -110,7 +115,7 @@ public class UserInteraction {
         }
 
         if(thisUserExists == true) {
-            Object o = new JSONParser().parse(new FileReader(name + ".json"));
+            Object o = new JSONParser().parse(new FileReader(new File(String.valueOf(endpath),name + ".json")));
             JSONObject js = (JSONObject) o;
             String pw = (String) js.get("password");
 
@@ -147,25 +152,25 @@ public class UserInteraction {
 
 
         //Das boolean-Attribut "hasGame" in der JSON-Datei des aufrufenden Nutzers wird auf true gesetzt
-        Object o = new JSONParser().parse(new FileReader(Spieler1 + ".json"));
+        Object o = new JSONParser().parse(new FileReader(new File(String.valueOf(endpath),Spieler1 + ".json")));
         JSONObject js = (JSONObject) o;
         js.put("hasGame", true);
 
-        FileWriter file = new FileWriter(Spieler1 + ".json");
+        FileWriter file = new FileWriter(new File(String.valueOf(endpath),Spieler1 + ".json"));
         file.write(js.toJSONString());
         file.close();
 
 
         //Das Attribut "Spieler1" und das Attribut "aktuellDran" in der JSON-Datei für den Zustand des Spiels wird auf den aufrufenden Nutzer gesetzt und
         //das Attribut "Spieler2" auf "Computer"
-        Object og = new JSONParser().parse(new FileReader(Spieler1 + "game.json"));
+        Object og = new JSONParser().parse(new FileReader(new File(String.valueOf(endpath),Spieler1 + "-game.json")));
         JSONObject jsg = (JSONObject) og;
         jsg.put("Spieler1", Spieler1);
         jsg.put("Spieler2", "Computer");
         js.put("aktuellDran", "Spieler2");
 
 
-        FileWriter fileg = new FileWriter(Spieler1 + "game.json");
+        FileWriter fileg = new FileWriter(new File(String.valueOf(endpath),Spieler1 + "-game.json"));
         fileg.write(jsg.toJSONString());
         fileg.close();
 
@@ -191,23 +196,23 @@ public class UserInteraction {
 
 
         //Das boolean-Attribut "hasGame" in der JSON-Datei des aufrufenden Nutzers wird auf true gesetzt
-        Object o = new JSONParser().parse(new FileReader(Spieler1 + ".json"));
+        Object o = new JSONParser().parse(new FileReader(new File(String.valueOf(endpath),Spieler1 + ".json")));
         JSONObject js = (JSONObject) o;
         js.put("hasGame", true);
 
-        FileWriter file = new FileWriter(  Spieler1 + ".json");
+        FileWriter file = new FileWriter(new File(String.valueOf(endpath),Spieler1 + ".json"));
         file.write(js.toJSONString());
         file.close();
 
 
         //Das Attribut "Spieler1" und das Attribut "aktuellDran" in der JSON-Datei für den Zustand des Spiels wird auf den aufrufenden Nutzer gesetzt
-        Object og = new JSONParser().parse(new FileReader( Spieler1 + "game.json"));
+        Object og = new JSONParser().parse(new FileReader(new File(String.valueOf(endpath),Spieler1 + "-game.json")));
         JSONObject jsg = (JSONObject) og;
         jsg.put("Spieler1", Spieler1);
         js.put("aktuellDran", "Spieler1");
 
 
-        FileWriter fileg = new FileWriter(  Spieler1 + "game.json");
+        FileWriter fileg = new FileWriter(new File(String.valueOf(endpath),Spieler1 + "-game.json"));
         fileg.write(jsg.toJSONString());
         fileg.close();
 
@@ -244,14 +249,14 @@ public class UserInteraction {
 
 
         //Nachschauen, ob der angefragte Nutzer ein Spiel erstellt hat
-        Object o = new JSONParser().parse(new FileReader(name + ".json"));
+        Object o = new JSONParser().parse(new FileReader(new File(String.valueOf(endpath),name + ".json")));
         JSONObject js = (JSONObject) o;
         boolean hasGame = (boolean) js.get("hasGame");
 
 
         //Nachschauen, ob das Spiel bereits 2 Spieler enthält, also ob es schon läuft
         if(hasGame==true) {
-            Object og = new JSONParser().parse(new FileReader(name + "game.json"));
+            Object og = new JSONParser().parse(new FileReader(new File(String.valueOf(endpath),name + "-game.json")));
             JSONObject jsg = (JSONObject) og;
             String player2 = (String) jsg.get("Spieler2");
 
@@ -261,7 +266,7 @@ public class UserInteraction {
                 ausgabe = "Sie sind dem Spiel erfolreich beigetreten.";
                 jsg.put("Spieler2", Spieler2);
 
-                FileWriter fileg = new FileWriter(name + "game.json");
+                FileWriter fileg = new FileWriter(new File(String.valueOf(endpath),name + "-game.json"));
                 fileg.write(jsg.toJSONString());
                 fileg.close();
             }
@@ -312,7 +317,7 @@ public class UserInteraction {
 
             if(aktuellDran.equals("Spieler1") && ausgabe.equals("")) return "Diese Spalte ist bereits komplett gefüllt";
 
-            FileWriter file = new FileWriter(name + "game.json");
+            FileWriter file = new FileWriter(new File(String.valueOf(endpath),name + "-game.json"));
             file.write(js.toJSONString());
             file.close();
 
@@ -337,7 +342,7 @@ public class UserInteraction {
     public String player2place(@RequestParam(value = "column") int column, @RequestParam(value = "name") String name) throws IOException, ParseException {
         String ausgabe = "";
 
-        Object o = new JSONParser().parse(new FileReader(name + "game.json"));
+        Object o = new JSONParser().parse(new FileReader(new File(String.valueOf(endpath),name + "-game.json")));
         JSONObject js = (JSONObject) o;
         String aktuellDran = (String) js.get("aktuellDran");
 
@@ -357,7 +362,7 @@ public class UserInteraction {
 
             if(aktuellDran.equals("Spieler2") && ausgabe.equals("")) return "Diese Spalte ist bereits komplett gefüllt";
 
-            FileWriter file = new FileWriter(name + "game.json");
+            FileWriter file = new FileWriter(new File(String.valueOf(endpath),name + "-game.json"));
             file.write(js.toJSONString());
             file.close();
 
@@ -380,7 +385,7 @@ public class UserInteraction {
     public String checkLastMove(@RequestParam(value = "name") String name) throws IOException, ParseException {
         String ausgabe = "";
 
-        Object o = new JSONParser().parse(new FileReader(name + "game.json"));
+        Object o = new JSONParser().parse(new FileReader(new File(String.valueOf(endpath),name + "-game.json")));
         JSONObject js = (JSONObject) o;
         String aktuellDran = (String) js.get("aktuellDran");
 
@@ -404,7 +409,7 @@ public class UserInteraction {
     public String checkWinner(@RequestParam(value = "name") String name) throws IOException, ParseException {
         String ausgabe = " ";
 
-        Object o = new JSONParser().parse(new FileReader( name + "game.json"));
+        Object o = new JSONParser().parse(new FileReader(new File(String.valueOf(endpath),name + "-game.json")));
         JSONObject js = (JSONObject) o;
 
         //Horizontal prüfen
@@ -637,7 +642,7 @@ public class UserInteraction {
         String name = users[aktuellerNutzer];
         users[aktuellerNutzer] = null;
 
-        Object o = new JSONParser().parse(new FileReader(name + ".json"));
+        Object o = new JSONParser().parse(new FileReader(new File(String.valueOf(endpath),name + ".json")));
         JSONObject js = (JSONObject) o;
         js.put("name", "");
         js.put("password", "");

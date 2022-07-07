@@ -25,7 +25,7 @@ public class UserCreation {
 
         public void newUser(String name, String password) throws IOException{
             Path path = Paths.get("").toAbsolutePath();
-            Path endpath = Path.of(path + "\\rest-service11\\json");
+            Path endpath = Path.of(path + "\\rest-service11\\json-Dateien");
             JSONObject newUser = new JSONObject();
 
             newUser.put("name", name);

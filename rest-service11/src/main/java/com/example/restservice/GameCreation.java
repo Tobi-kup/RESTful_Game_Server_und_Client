@@ -1,5 +1,7 @@
 package com.example.restservice;
 import org.json.simple.*;
+
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -21,7 +23,8 @@ public class GameCreation {
      */
 
     public void newGame(String name) throws IOException{
-        Path path = Paths.get("");
+        Path path = Paths.get("").toAbsolutePath();
+        Path endpath = Path.of(path + "\\rest-service11\\json-Dateien");
         JSONObject newGame = new JSONObject();
 
         newGame.put("Spieler1", "");
@@ -78,7 +81,7 @@ public class GameCreation {
 
 
 
-        FileWriter file = new FileWriter(  name + "game.json");
+        FileWriter file = new FileWriter(new File(String.valueOf(endpath),name + "-game.json"));
         file.write(newGame.toJSONString());
         file.close();
     }
