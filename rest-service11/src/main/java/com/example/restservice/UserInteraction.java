@@ -16,6 +16,14 @@ import java.nio.file.Paths;
 @RestController
 public class UserInteraction {
 
+    /**
+     * 1 Attribut vom Typ int für die Abfrage des aktuellen Nutzers innerhalb des Nutzerarrays
+     * 1 Array vom Typ String zur Speicherung der Namen aller Nutzer
+     * Instanz der Klasse gameCreation um Spiele zu erstellen
+     * Instanz der Klasse userCreation um neue Nutzer anzulegen
+     * 2 Attribute vom Typ Path um auf die json-Dateien zuzugreifen
+     */
+
     int aktuellerNutzer = 0;
     String[] users = new String[30];
 
@@ -23,7 +31,8 @@ public class UserInteraction {
     UserCreation uc = new UserCreation();
 
     Path path = Paths.get("").toAbsolutePath();
-    Path endpath = Path.of(path + "\\rest-service11\\json-Dateien");
+    Path endpath = Path.of(path + "\\json-Dateien");
+
 
     public UserInteraction(){}
 

@@ -165,10 +165,12 @@ public class SpieleTest {
     void place1placeSpalteVoll(){
         String eingabe = rt.getForObject("http://localhost:8080/signup?name=Test13&password=123", String.class);
         eingabe = rt.getForObject("http://localhost:8080/login?name=Test13&password=123", String.class);
-        eingabe = rt.getForObject("http://localhost:8080/createSingleplayerGame?name=Test13", String.class);
-        for(int i=1; i<=7; i++) {
+        eingabe = rt.getForObject("http://localhost:8080/createMultiplayerGame?name=Test13", String.class);
+        for(int i=1; i<=3; i++) {
             eingabe = rt.getForObject("http://localhost:8080/player1place?column=1&name=Test13", String.class);
+            eingabe = rt.getForObject("http://localhost:8080/player2place?column=1&name=Test13", String.class);
         }
+        eingabe = rt.getForObject("http://localhost:8080/player1place?column=1&name=Test13", String.class);
         if(eingabe.equals("Diese Spalte ist bereits komplett gefüllt")) System.out.println("True");
         else System.out.println("False");
     }
@@ -270,7 +272,7 @@ public class SpieleTest {
 
 
     @Test
-    @DisplayName("Verwendung von 'delete' nach Anmeldung")
+    @DisplayName("Verwendung von 'delete'")
     void deleteErfolgreich(){
         String eingabe = rt.getForObject("http://localhost:8080/signup?name=Test18&password=123", String.class);
         eingabe = rt.getForObject("http://localhost:8080/login?name=Test18&password=123", String.class);
@@ -280,15 +282,5 @@ public class SpieleTest {
         else System.out.println("False");
     }
 
-
-    @Test
-    @DisplayName("Verwendung von 'delete' ohne Anmeldung")
-    void deleteFehler(){
-        String eingabe = rt.getForObject("http://localhost:8080/signup?name=Test18&password=123", String.class);
-        eingabe = rt.getForObject("http://localhost:8080/delete", String.class);
-
-        if(eingabe.equals("Sie müssen angemeldet sein, um ihr Konto zu löschen.")) System.out.println("True");
-        else System.out.println("False");
-    }
 
 }

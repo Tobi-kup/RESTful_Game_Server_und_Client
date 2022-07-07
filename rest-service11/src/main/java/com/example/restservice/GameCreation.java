@@ -24,7 +24,7 @@ public class GameCreation {
 
     public void newGame(String name) throws IOException{
         Path path = Paths.get("").toAbsolutePath();
-        Path endpath = Path.of(path + "\\rest-service11\\json-Dateien");
+        Path endpath = Path.of(path + "\\json-Dateien");
         JSONObject newGame = new JSONObject();
 
         newGame.put("Spieler1", "");
