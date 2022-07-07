@@ -15,7 +15,7 @@ import java.io.*;
 public class UserInteraction {
 
     int aktuellerNutzer = 0;
-    String[] users = new String[10];
+    String[] users = new String[30];
 
     GameCreation gc = new GameCreation();
     UserCreation uc = new UserCreation();
@@ -250,23 +250,30 @@ public class UserInteraction {
 
 
         //Nachschauen, ob das Spiel bereits 2 Spieler enthält, also ob es schon läuft
-        Object og = new JSONParser().parse(new FileReader(name + "game.json"));
-        JSONObject jsg = (JSONObject) og;
-        String player2 = (String) jsg.get("Spieler2");
+        if(hasGame==true) {
+            Object og = new JSONParser().parse(new FileReader(name + "game.json"));
+            JSONObject jsg = (JSONObject) og;
+            String player2 = (String) jsg.get("Spieler2");
 
+            //Wenn das Spiel existiert und kein 2. Spieler da ist, wird der aktuelle Nutzer zum 2. Spieler
+            if (player2.equals("")) {
+                String Spieler2 = users[aktuellerNutzer];
+                ausgabe = "Sie sind dem Spiel erfolreich beigetreten.";
+                jsg.put("Spieler2", Spieler2);
 
-        //Wenn das Spiel existiert und kein 2. Spieler da ist, wird der aktuelle Nutzer zum 2. Spieler
-        if(hasGame == true && player2.equals("")){
-            String Spieler2 = users[aktuellerNutzer];
-            ausgabe = "Sie sind dem Spiel erfolreich beigetreten.";
-            jsg.put("Spieler2", Spieler2);
+                FileWriter fileg = new FileWriter(name + "game.json");
+                fileg.write(jsg.toJSONString());
+                fileg.close();
+            }
 
-            FileWriter fileg = new FileWriter(name + "game.json");
-            fileg.write(jsg.toJSONString());
-            fileg.close();
-
+            //Wenn das Spiel existiert und 2. Spieler bereits im Spiel ist, wird dies so ausgegeben
+            else if (!player2.equals("")) {
+                ausgabe = "Das Spiel läuft bereits.";
+            }
         }
+
         else ausgabe = "Dieser Spieler hat kein Spiel erstellt.";
+
 
         return ausgabe;
     }
