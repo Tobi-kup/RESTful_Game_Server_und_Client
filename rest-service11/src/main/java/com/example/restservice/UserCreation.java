@@ -1,5 +1,7 @@
 package com.example.restservice;
 import org.json.simple.*;
+
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -22,15 +24,16 @@ public class UserCreation {
       */
 
         public void newUser(String name, String password) throws IOException{
-             Path path = Paths.get("");
-             JSONObject newUser = new JSONObject();
+            Path path = Paths.get("").toAbsolutePath();
+            Path endpath = Path.of(path + "\\rest-service11\\json");
+            JSONObject newUser = new JSONObject();
 
-             newUser.put("name", name);
-             newUser.put("password", password);
-             newUser.put("hasGame", false);
+            newUser.put("name", name);
+            newUser.put("password", password);
+            newUser.put("hasGame", false);
 
-             FileWriter file = new FileWriter(  name + ".json");
-             file.write(newUser.toJSONString());
-             file.close();
+            FileWriter file = new FileWriter(new File(String.valueOf(endpath),name + ".json"));
+            file.write(newUser.toJSONString());
+            file.close();
     }
 }
